@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"D:\\\\Users\\\\karczynski_t\\\\10xDEVS\\\\.bootstrap-scaffold\" -Force | Where-Object { !$_.PSIsContainer } | Select-Object Name)"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env*
+!.env.example
+
+# cloudflare
+.dev.vars
+.wrangler/
+
+# cache
+.cache/
+
+# IDE
+.idea/
+.vscode/
+
+# system
+.DS_Store
+
+# skille
+.agents/
