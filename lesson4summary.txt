@@ -56,3 +56,7 @@ Output: agent used formatDate() automatically — rule internalized from CLAUDE.
 
 5. Conclusion: the Date Handling rule earns its place. The agent diverged from the
    convention without it, converged with it, and carried it forward without prompting.
+
+## Tokens 
+- new session, create new function 700-900 Tokens
+- next and next the same request, numbers of tokens drops to 250
