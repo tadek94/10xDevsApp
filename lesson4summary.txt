@@ -1,0 +1,58 @@
+Lesson 4 — 5-Pattern Calibration Drill Summary
+===============================================
+
+Pattern tested: Date formatting in API endpoints
+
+## Setup
+
+Files created to test agent behavior before and after adding a Date Handling rule to CLAUDE.md.
+
+## Phase 1 — No rule in CLAUDE.md
+
+Files: lesson4test.ts, lesson4test2.ts, lesson4test3.ts, lesson4ruleaddedTest1.ts
+
+Agent used `new Date().toISOString()` directly in every endpoint.
+Tool calls per file: 1–2. Fast, consistent — but no centralized formatting helper.
+
+## Phase 2 — Rule referenced but missing from CLAUDE.md
+
+Prompt: "Follow project conventions from CLAUDE.md, look at Date Handling section."
+
+Agent correctly refused to hallucinate the section and reported it did not exist.
+This happened twice — the agent did not invent rules for a missing section.
+
+## Phase 3 — Rule added to CLAUDE.md
+
+Section added:
+  ## Date Handling
+  - Always use UTC dates.
+  - Always format output using `formatDate()`.
+  - Do not use `new Date().toISOString()`.
+
+File: lesson4ruleaddedTest3.ts
+Tool calls: 3 (Read utils.ts → add formatDate() → write endpoint)
+Cost: higher on first run — rule forced creation of the missing helper.
+Output: formatDate() added to src/lib/utils.ts; endpoint used @/lib/utils import.
+
+## Phase 4 — Rule in CLAUDE.md, no explicit prompt
+
+File: lesson4ruleaddedTest4.ts
+Prompt: no mention of Date Handling section.
+Tool calls: 1 (Write only)
+Output: agent used formatDate() automatically — rule internalized from CLAUDE.md.
+
+## Key findings
+
+1. Without a rule, the agent defaulted to the idiomatic JS pattern (toISOString directly).
+   Consistent but not convention-aware.
+
+2. The agent did not hallucinate missing rule sections — it reported the gap and waited.
+
+3. Adding the rule had a one-time cost (discovering and creating formatDate()) but changed
+   the output structurally: a reusable helper now exists in src/lib/utils.ts.
+
+4. On the next run (lesson4ruleaddedTest4), the rule applied automatically with no extra
+   tool calls — steady-state cost equals no-rule cost, but output is convention-correct.
+
+5. Conclusion: the Date Handling rule earns its place. The agent diverged from the
+   convention without it, converged with it, and carried it forward without prompting.
