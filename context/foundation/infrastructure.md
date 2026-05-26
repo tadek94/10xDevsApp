@@ -107,3 +107,4 @@ The following were not evaluated in this research:
 - Docker image configuration
 - CI/CD pipeline setup (beyond the built-in Pages Git integration)
 - Production-scale architecture (multi-region, HA, DR)
+
