@@ -60,6 +60,13 @@ Full server-side rendering (`output: "server"` in `astro.config.mjs`). All pages
 
 See `@.github/workflows/ci.yml`.
 
+## Deployment rules
+
+- **Tokens are scoped, not master keys.** Cloudflare API token: limited to Workers for this project only — no DNS, no billing, no unrelated projects.
+- **Tokens live in env vars, not committed files.** Never put `CLOUDFLARE_API_TOKEN` or `SUPABASE_KEY` in `.mcp.json`, `wrangler.jsonc`, or any tracked file.
+- **Destructive actions are human-only.** Drop a database, rotate a primary secret, delete a Worker — panel-by-hand only. Manual click costs 30 seconds; cleanup after an automated mistake costs hours.
+- **`context/archive/` is immutable.** Never write to `context/archive/`. If a resolved target path starts with `context/archive/`, abort and tell the user to open a new change with `/10x-new`.
+
 ---
 
 <!-- BEGIN @przeprogramowani/10x-cli -->
