@@ -14,16 +14,18 @@
       "Bash(git stash *)",
       "Read",
       "Edit",
-      "Write"
+      "Write",
+      "Skill(10x-rule-review)",
+      "Bash(gh issue *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
     ],
     "ask": [
       "Bash(curl *)",
       "Bash(wget *)",
       "Bash(git push *)",
       "Bash(git push)"
-    ],
-    "deny": [
-      "Bash(rm -rf *)"
     ]
   }
 }
