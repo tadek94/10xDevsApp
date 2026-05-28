@@ -33,3 +33,4 @@ pnpm-debug.log*
 
 # skille
 .agents/
+.claude/skills/
