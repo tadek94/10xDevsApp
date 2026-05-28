@@ -212,23 +212,23 @@ This migration introduces the first row in `supabase/migrations/`. Future migrat
 
 #### Automated
 
-- [x] 1.1 Migration file exists at `supabase/migrations/20260528000000_create_flashcards.sql`
-- [x] 1.2 `npm run lint` passes with no errors
+- [x] 1.1 Migration file exists at `supabase/migrations/20260528000000_create_flashcards.sql` — 8d21e10
+- [x] 1.2 `npm run lint` passes with no errors — 8d21e10
 
 #### Manual
 
-- [x] 1.3 SQL file visually reviewed before pushing
+- [x] 1.3 SQL file visually reviewed before pushing — 8d21e10
 
 ### Phase 2: TypeScript Types
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes
-- [ ] 2.2 `npm run build` passes
+- [x] 2.1 `npm run lint` passes
+- [x] 2.2 `npm run build` passes
 
 #### Manual
 
-- [ ] 2.3 `src/types.ts` exports importable without errors
+- [x] 2.3 `src/types.ts` exports importable without errors
 
 ### Phase 3: Push and Verify
 
