@@ -223,21 +223,21 @@ This migration introduces the first row in `supabase/migrations/`. Future migrat
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes
-- [x] 2.2 `npm run build` passes
+- [x] 2.1 `npm run lint` passes — 65cb62c
+- [x] 2.2 `npm run build` passes — 65cb62c
 
 #### Manual
 
-- [x] 2.3 `src/types.ts` exports importable without errors
+- [x] 2.3 `src/types.ts` exports importable without errors — 65cb62c
 
 ### Phase 3: Push and Verify
 
 #### Automated
 
-- [ ] 3.1 `npx supabase db push` exits 0, reports 1 migration applied
+- [x] 3.1 `npx supabase db push` exits 0, reports 1 migration applied
 
 #### Manual
 
-- [ ] 3.2 `flashcards` table visible in Supabase dashboard with correct columns
-- [ ] 3.3 4 RLS policies listed under `flashcards` in Authentication → Policies
-- [ ] 3.4 RLS badge shown on `flashcards` table
+- [x] 3.2 `flashcards` table visible in Supabase dashboard with correct columns
+- [x] 3.3 4 RLS policies listed under `flashcards` in Authentication → Policies
+- [x] 3.4 RLS badge shown on `flashcards` table
