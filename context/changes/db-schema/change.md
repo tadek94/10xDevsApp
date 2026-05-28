@@ -1,7 +1,7 @@
 ---
 change_id: db-schema
 title: Flashcard schema and RLS migration in Supabase
-status: implementing
+status: implemented
 created: 2026-05-28
 updated: 2026-05-28
 archived_at: null

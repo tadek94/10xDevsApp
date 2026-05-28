@@ -234,10 +234,10 @@ This migration introduces the first row in `supabase/migrations/`. Future migrat
 
 #### Automated
 
-- [x] 3.1 `npx supabase db push` exits 0, reports 1 migration applied
+- [x] 3.1 `npx supabase db push` exits 0, reports 1 migration applied — 3a466c6
 
 #### Manual
 
-- [x] 3.2 `flashcards` table visible in Supabase dashboard with correct columns
-- [x] 3.3 4 RLS policies listed under `flashcards` in Authentication → Policies
-- [x] 3.4 RLS badge shown on `flashcards` table
+- [x] 3.2 `flashcards` table visible in Supabase dashboard with correct columns — 3a466c6
+- [x] 3.3 4 RLS policies listed under `flashcards` in Authentication → Policies — 3a466c6
+- [x] 3.4 RLS badge shown on `flashcards` table — 3a466c6
