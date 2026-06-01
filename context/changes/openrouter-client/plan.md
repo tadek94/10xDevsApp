@@ -183,23 +183,23 @@ export const GET: APIRoute = async () => {
 
 #### Automated
 
-- [x] 1.1 `npm install openai` exits 0, package in dependencies
-- [x] 1.2 `npm run lint` passes with no errors
-- [x] 1.3 `npm run build` passes for Cloudflare target
+- [x] 1.1 `npm install openai` exits 0, package in dependencies — 0619022
+- [x] 1.2 `npm run lint` passes with no errors — 0619022
+- [x] 1.3 `npm run build` passes for Cloudflare target — 0619022
 
 #### Manual
 
-- [x] 1.4 `src/lib/ai.ts` has no TypeScript errors in IDE
-- [x] 1.5 Both `.env.example` and `.dev.vars.example` contain `OPENROUTER_API_KEY=###`
+- [x] 1.4 `src/lib/ai.ts` has no TypeScript errors in IDE — 0619022
+- [x] 1.5 Both `.env.example` and `.dev.vars.example` contain `OPENROUTER_API_KEY=###` — 0619022
 
 ### Phase 2: Workerd Smoke Test
 
 #### Automated
 
-- [ ] 2.1 `npm run dev` starts without import or runtime errors
+- [x] 2.1 `npm run dev` starts without import or runtime errors
 
 #### Manual
 
-- [ ] 2.2 `GET /api/ai-test` returns `{ "result": "OK" }` (or equivalent)
-- [ ] 2.3 No CJS/crypto errors in dev console
-- [ ] 2.4 Smoke test route deleted, `npm run build` still passes
+- [x] 2.2 `GET /api/ai-test` returns `{ "result": "OK" }` (or equivalent)
+- [x] 2.3 No CJS/crypto errors in dev console
+- [x] 2.4 Smoke test route deleted, `npm run build` still passes
