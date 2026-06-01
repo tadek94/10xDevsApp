@@ -196,10 +196,10 @@ export const GET: APIRoute = async () => {
 
 #### Automated
 
-- [x] 2.1 `npm run dev` starts without import or runtime errors
+- [x] 2.1 `npm run dev` starts without import or runtime errors — b075dd0
 
 #### Manual
 
-- [x] 2.2 `GET /api/ai-test` returns `{ "result": "OK" }` (or equivalent)
-- [x] 2.3 No CJS/crypto errors in dev console
-- [x] 2.4 Smoke test route deleted, `npm run build` still passes
+- [x] 2.2 `GET /api/ai-test` returns `{ "result": "OK" }` (or equivalent) — b075dd0
+- [x] 2.3 No CJS/crypto errors in dev console — b075dd0
+- [x] 2.4 Smoke test route deleted, `npm run build` still passes — b075dd0
