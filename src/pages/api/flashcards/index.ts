@@ -12,7 +12,8 @@ const SaveCardsSchema = z.object({
         back: z.string().min(1),
       }),
     )
-    .min(1),
+    .min(1)
+    .max(15),
 });
 
 export const POST: APIRoute = async (context) => {
@@ -51,7 +52,9 @@ export const POST: APIRoute = async (context) => {
   const { data, error } = await supabase.from("flashcards").insert(rows).select("id");
 
   if (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return Response.json({ error: "Failed to save flashcards" }, { status: 500 });
   }
 
   return Response.json({ saved: data.length });

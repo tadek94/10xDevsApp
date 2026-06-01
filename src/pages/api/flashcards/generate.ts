@@ -5,7 +5,7 @@ import { ai, DEFAULT_MODEL } from "@/lib/ai";
 export const prerender = false;
 
 const GenerateSchema = z.object({
-  text: z.string().min(1, "Text is required"),
+  text: z.string().min(1, "Text is required").max(10000, "Text must be at most 10000 characters"),
 });
 
 function stripMarkdownFences(content: string): string {
@@ -45,6 +45,7 @@ export const POST: APIRoute = async (context) => {
     return Response.json({ error: "Text must be at least 50 words" }, { status: 400 });
   }
 
+  let raw: string;
   try {
     const completion = await ai.chat.completions.create({
       model: DEFAULT_MODEL,
@@ -54,8 +55,12 @@ export const POST: APIRoute = async (context) => {
       ],
       max_tokens: 2000,
     });
+    raw = completion.choices[0]?.message?.content ?? "";
+  } catch {
+    return Response.json({ error: "AI service unavailable" }, { status: 502 });
+  }
 
-    const raw = completion.choices[0]?.message?.content ?? "";
+  try {
     const cleaned = stripMarkdownFences(raw);
     const cards: unknown = JSON.parse(cleaned);
 
@@ -79,6 +84,6 @@ export const POST: APIRoute = async (context) => {
 
     return Response.json({ cards: validated });
   } catch {
-    return Response.json({ error: "AI service error" }, { status: 422 });
+    return Response.json({ error: "No cards generated" }, { status: 422 });
   }
 };

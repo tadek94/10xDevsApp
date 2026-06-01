@@ -11,6 +11,13 @@
 - **Corollary**: `imageService: "passthrough"` should be set in the adapter config when Cloudflare Images is not needed — otherwise the adapter adds an IMAGES binding that requires a paid Cloudflare Images subscription.
 - **Applies to**: deploy
 
+## Supabase Migrations: Always Include Explicit GRANTs
+
+- **Context**: Tworzenie nowych tabel przez migracje Supabase (`supabase/migrations/`).
+- **Problem**: Nowe projekty Supabase nie mają automatycznych default privileges. Migracja F-01 (`flashcards`) nie zawierała GRANT — INSERT kończył się `permission denied for table` nawet dla zalogowanych użytkowników z prawidłową polityką RLS.
+- **Rule**: Każda migracja tworząca nową tabelę musi zawierać jawny GRANT: `GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.<table> TO authenticated;`. RLS policies bez GRANT nie wystarczają.
+- **Applies to**: plan, implement, impl-review
+
 ## Always Set a Kill Date on Feature Flags
 
 - **Context**: Planning & implementation phases — any point where a feature flag is introduced.
