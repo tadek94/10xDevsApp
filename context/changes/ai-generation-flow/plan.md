@@ -343,13 +343,13 @@ AI calls will exceed the Cloudflare Workers free-tier 50ms CPU limit. The Worker
 
 #### Automated
 
-- [x] 3.1 `npm run lint` passes
-- [x] 3.2 `npm run build` passes
+- [x] 3.1 `npm run lint` passes — 9eb45e3
+- [x] 3.2 `npm run build` passes — 9eb45e3
 
 #### Manual
 
-- [x] 3.3 /generate without session → redirect to signin
-- [x] 3.4 /generate with session → page renders correctly
-- [x] 3.5 Dashboard shows "Generuj fiszki" link to /generate
-- [x] 3.6 Full end-to-end flow: text → generate → review → save → persist in Supabase
-- [x] 3.7 No regressions: dashboard, auth pages still work
+- [x] 3.3 /generate without session → redirect to signin — 9eb45e3
+- [x] 3.4 /generate with session → page renders correctly — 9eb45e3
+- [x] 3.5 Dashboard shows "Generuj fiszki" link to /generate — 9eb45e3
+- [x] 3.6 Full end-to-end flow: text → generate → review → save → persist in Supabase — 9eb45e3
+- [x] 3.7 No regressions: dashboard, auth pages still work — 9eb45e3
