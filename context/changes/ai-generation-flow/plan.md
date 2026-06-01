@@ -311,23 +311,23 @@ AI calls will exceed the Cloudflare Workers free-tier 50ms CPU limit. The Worker
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes
-- [x] 1.2 `npm run build` passes
+- [x] 1.1 `npm run lint` passes — 9618416
+- [x] 1.2 `npm run build` passes — 9618416
 
 #### Manual
 
-- [x] 1.3 POST /api/flashcards/generate returns cards for valid text + session
-- [x] 1.4 POST /api/flashcards/generate returns 401 without session
-- [x] 1.5 POST /api/flashcards/generate returns 400 for text < 50 words
-- [x] 1.6 POST /api/flashcards saves cards to Supabase, visible in dashboard
-- [x] 1.7 POST /api/flashcards returns 401 without session
+- [x] 1.3 POST /api/flashcards/generate returns cards for valid text + session — 9618416
+- [x] 1.4 POST /api/flashcards/generate returns 401 without session — 9618416
+- [x] 1.5 POST /api/flashcards/generate returns 400 for text < 50 words — 9618416
+- [x] 1.6 POST /api/flashcards saves cards to Supabase, visible in dashboard — 9618416
+- [x] 1.7 POST /api/flashcards returns 401 without session — 9618416
 
 ### Phase 2: UI Components
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes
-- [ ] 2.2 `npm run build` passes
+- [x] 2.1 `npm run lint` passes
+- [x] 2.2 `npm run build` passes
 
 #### Manual
 
