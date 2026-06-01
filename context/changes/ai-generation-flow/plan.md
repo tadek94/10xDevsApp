@@ -326,30 +326,30 @@ AI calls will exceed the Cloudflare Workers free-tier 50ms CPU limit. The Worker
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes
-- [x] 2.2 `npm run build` passes
+- [x] 2.1 `npm run lint` passes — 3323f35
+- [x] 2.2 `npm run build` passes — 3323f35
 
 #### Manual
 
-- [ ] 2.3 Textarea shows word counter; Generate button disabled < 50 words
-- [ ] 2.4 Generate button shows spinner immediately on click
-- [ ] 2.5 Cards appear after generation, all accepted by default
-- [ ] 2.6 Per-card reject and inline edit work correctly
-- [ ] 2.7 Save button disabled with 0 accepted cards
-- [ ] 2.8 Save flow: spinner → success banner + form reset
-- [ ] 2.9 AI error shows inline error message
+- [x] 2.3 Textarea shows word counter; Generate button disabled < 50 words
+- [x] 2.4 Generate button shows spinner immediately on click
+- [x] 2.5 Cards appear after generation, all accepted by default
+- [x] 2.6 Per-card reject and inline edit work correctly
+- [x] 2.7 Save button disabled with 0 accepted cards
+- [x] 2.8 Save flow: spinner → success banner + form reset
+- [x] 2.9 AI error shows inline error message
 
 ### Phase 3: Page + Navigation
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes
-- [ ] 3.2 `npm run build` passes
+- [x] 3.1 `npm run lint` passes
+- [x] 3.2 `npm run build` passes
 
 #### Manual
 
-- [ ] 3.3 /generate without session → redirect to signin
-- [ ] 3.4 /generate with session → page renders correctly
-- [ ] 3.5 Dashboard shows "Generuj fiszki" link to /generate
-- [ ] 3.6 Full end-to-end flow: text → generate → review → save → persist in Supabase
-- [ ] 3.7 No regressions: dashboard, auth pages still work
+- [x] 3.3 /generate without session → redirect to signin
+- [x] 3.4 /generate with session → page renders correctly
+- [x] 3.5 Dashboard shows "Generuj fiszki" link to /generate
+- [x] 3.6 Full end-to-end flow: text → generate → review → save → persist in Supabase
+- [x] 3.7 No regressions: dashboard, auth pages still work
