@@ -24,3 +24,10 @@
 - **Problem**: Flags accumulate and are never cleaned up; dead flags litter the codebase and block future refactors.
 - **Rule**: Feature flags should always have a kill date. Record the date (or milestone) at the time the flag is introduced — not as an afterthought.
 - **Applies to**: plan, implement, impl-review
+
+## Endpointy API z RLS: Zhydratyzuj sesję przez getSession() przed zapytaniami
+
+- **Context**: Każdy endpoint API (src/pages/api/) tworzący nowego klienta Supabase i wykonujący zapytania do tabel z politykami RLS opartymi na auth.uid().
+- **Problem**: Świeży klient z createClient() nie ma zhydratyzowanej sesji. Bez wczytania sesji zapytanie leci z anon key, auth.uid()=null i polityka WITH CHECK odrzuca każdy wiersz (F8). Osobny problem od brakującego GRANT — oba muszą być spełnione.
+- **Rule**: Przed zapytaniami do tabel RLS w endpoincie wywołaj `await supabase.auth.getSession()` aby zhydratyzować JWT. Używaj getSession() (lokalny odczyt cookie, bez round-tripu), nie getUser() — tożsamość waliduje middleware.
+- **Applies to**: plan, implement, impl-review
