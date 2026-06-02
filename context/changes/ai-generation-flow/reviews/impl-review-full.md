@@ -22,6 +22,8 @@
 
 Drift agent verified all 9 changed files: **all MATCH**. Cross-phase integration: all 12 checkpoints PASS. Phase 1 warnings F1–F7 resolved in commit `a84ab4b`. F8 is carried from Phase 1 F1 (SKIPPED).
 
+**Triage outcome (commit `c3849cd`):** F8/F9/F11 fixed, F10 accepted with no action. **F8 was fixed better than the review recommended** — the review's suggestion to delete `getUser()` was incorrect and would have broken every save: the INSERT RLS policy `WITH CHECK (auth.uid() = user_id)` requires the endpoint's freshly created client to hydrate the user JWT, so without it `auth.uid()` is null and all inserts are rejected. The GRANT migration fixed a separate, GRANT-level error. The legitimate concern (an Auth-server round-trip) was instead resolved by switching `getUser()` → `getSession()`, which decodes the cookie locally with no round-trip while still hydrating the JWT; identity is already validated by middleware.
+
 ## Findings
 
 ### F8 — Redundantny getUser() w save endpoint (przeniesiony z F1)
