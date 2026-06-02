@@ -31,3 +31,10 @@
 - **Problem**: Świeży klient z createClient() nie ma zhydratyzowanej sesji. Bez wczytania sesji zapytanie leci z anon key, auth.uid()=null i polityka WITH CHECK odrzuca każdy wiersz (F8). Osobny problem od brakującego GRANT — oba muszą być spełnione.
 - **Rule**: Przed zapytaniami do tabel RLS w endpoincie wywołaj `await supabase.auth.getSession()` aby zhydratyzować JWT. Używaj getSession() (lokalny odczyt cookie, bez round-tripu), nie getUser() — tożsamość waliduje middleware.
 - **Applies to**: plan, implement, impl-review
+
+## Endpointy mutujące pod optymistyczny UI: zwracaj pełny rekord, nie samo id
+
+- **Context**: Endpointy API mutujące wiersz (POST/PATCH) w `src/pages/api/`, których wynik konsumuje React-island aktualizujący stan lokalnie (np. `flashcards/[id].ts` PATCH, `flashcards/index.ts` POST).
+- **Problem**: Plan kontraktował zwrot `{id}` / `.select("id")`, ale wyspa potrzebuje pełnej karty (`front, back, created_at`), by zsynchronizować stan bez dodatkowego round-tripu. Implementacja musiała odejść od litery planu (zwraca `{card}` / `{cards}`). Rozjazd plan↔UI wychodzi dopiero przy budowie frontu.
+- **Rule**: Gdy endpoint mutujący feeduje optymistyczny UI, projektuj kontrakt tak, by zwracał pełny zmieniony rekord (`.select` z kompletem pól), a plan ma to jawnie określać — nie domyślne `{id}`.
+- **Applies to**: plan, implement, impl-review

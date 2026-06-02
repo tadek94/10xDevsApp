@@ -140,15 +140,16 @@ SSR-owana strona `/flashcards.astro` ładuje listę z bazy i przekazuje ją do R
 
 #### 5. Ochrona route'u i nawigacja
 
-**File**: `src/middleware.ts`, `src/pages/dashboard.astro`, `src/pages/generate.astro`
+**File**: `src/middleware.ts`, `src/pages/dashboard.astro`, `src/pages/generate.astro`, `src/pages/flashcards.astro`
 
-**Intent**: Wymusić auth na `/flashcards` i dać użytkownikowi wejścia do kolekcji.
+**Intent**: Wymusić auth na `/flashcards` i dać użytkownikowi wejścia do kolekcji oraz powrót z niej.
 
 **Contract**:
 
 - `middleware.ts`: dodać `"/flashcards"` do `PROTECTED_ROUTES`.
 - `dashboard.astro`: dodać link „Moja kolekcja" → `/flashcards` (wzór istniejącego linku „Generuj fiszki", `dashboard.astro:18-23`).
 - `generate.astro`: dodać link/powrót do `/flashcards` (po zapisaniu kart użytkownik trafia do kolekcji).
+- `flashcards.astro`: górny pasek nawigacji z linkiem powrotnym „← Dashboard" i skrótem „Generuj fiszki" (addendum z przeglądu F2 — kolekcja nie może być ślepą uliczką).
 
 ### Success Criteria:
 
