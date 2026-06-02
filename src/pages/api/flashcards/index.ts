@@ -8,8 +8,8 @@ const SaveCardsSchema = z.object({
   cards: z
     .array(
       z.object({
-        front: z.string().min(1),
-        back: z.string().min(1),
+        front: z.string().trim().min(1),
+        back: z.string().trim().min(1),
       }),
     )
     .min(1)
@@ -40,8 +40,10 @@ export const POST: APIRoute = async (context) => {
     return Response.json({ error: "Database not configured" }, { status: 500 });
   }
 
-  // Load session into client so DB calls include the user JWT (same pattern as middleware)
-  await supabase.auth.getUser();
+  // Hydrate the session from cookies so DB calls carry the user JWT — required for the
+  // INSERT RLS policy `WITH CHECK (auth.uid() = user_id)`. getSession() decodes the cookie
+  // locally (no Auth round-trip); the user was already validated by middleware.
+  await supabase.auth.getSession();
 
   const rows = cards.map((card) => ({
     front: card.front,

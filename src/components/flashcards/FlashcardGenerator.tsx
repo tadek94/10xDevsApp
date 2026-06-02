@@ -49,6 +49,10 @@ export function FlashcardGenerator() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
+      if (res.status === 401) {
+        window.location.href = "/auth/signin";
+        return;
+      }
       const data: GenerateResponse = await res.json();
       if (!res.ok) {
         setError(data.error ?? "Wystąpił błąd podczas generowania.");
@@ -82,6 +86,10 @@ export function FlashcardGenerator() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cards: accepted }),
       });
+      if (res.status === 401) {
+        window.location.href = "/auth/signin";
+        return;
+      }
       const data: SaveResponse = await res.json();
       if (!res.ok) {
         setError(data.error ?? "Nie udało się zapisać kart.");
