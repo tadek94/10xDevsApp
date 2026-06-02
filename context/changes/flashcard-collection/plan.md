@@ -226,17 +226,17 @@ Brak. Schemat `flashcards` (F-01) już wspiera pełny CRUD i ma wymagane GRANT-y
 
 #### Automated
 
-- [x] 2.1 Build przechodzi: `npm run build`
-- [x] 2.2 Linting przechodzi: `npm run lint`
-- [x] 2.3 Formatowanie: `npm run format`
+- [x] 2.1 Build przechodzi: `npm run build` — 944ddde
+- [x] 2.2 Linting przechodzi: `npm run lint` — 944ddde
+- [x] 2.3 Formatowanie: `npm run format` — 944ddde
 
 #### Manual
 
-- [x] 2.4 `/flashcards` pokazuje własne karty posortowane od najnowszej
-- [x] 2.5 Niezalogowany na `/flashcards` → redirect `/auth/signin`
-- [x] 2.6 „Dodaj kartę" zapisuje; karta trwa po reloadzie
-- [x] 2.7 „Edytuj" zapisuje zmianę; zmiana trwa po reloadzie
-- [x] 2.8 „Usuń → Na pewno? Tak" usuwa; „Anuluj" zostawia kartę; stan zgodny po reloadzie
-- [x] 2.9 Pusta kolekcja → empty-state z linkiem do `/generate`
-- [x] 2.10 Linki z dashboardu i `/generate` prowadzą do `/flashcards`
-- [x] 2.11 Generowanie (S-01) bez regresji — `saved` poprawnie czytane z rozszerzonej odpowiedzi
+- [x] 2.4 `/flashcards` pokazuje własne karty posortowane od najnowszej — 944ddde
+- [x] 2.5 Niezalogowany na `/flashcards` → redirect `/auth/signin` — 944ddde
+- [x] 2.6 „Dodaj kartę" zapisuje; karta trwa po reloadzie — 944ddde
+- [x] 2.7 „Edytuj" zapisuje zmianę; zmiana trwa po reloadzie — 944ddde
+- [x] 2.8 „Usuń → Na pewno? Tak" usuwa; „Anuluj" zostawia kartę; stan zgodny po reloadzie — 944ddde
+- [x] 2.9 Pusta kolekcja → empty-state z linkiem do `/generate` — 944ddde
+- [x] 2.10 Linki z dashboardu i `/generate` prowadzą do `/flashcards` — 944ddde
+- [x] 2.11 Generowanie (S-01) bez regresji — `saved` poprawnie czytane z rozszerzonej odpowiedzi — 944ddde
