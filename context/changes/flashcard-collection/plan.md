@@ -58,6 +58,7 @@ Nowy dynamiczny endpoint `src/pages/api/flashcards/[id].ts` z handlerami `PATCH`
 **Intent**: Udostępnić edycję i usunięcie pojedynczej karty zalogowanego użytkownika, z walidacją wejścia i ochroną RLS. Reużyć wzorzec auth/hydratacji/błędów z `index.ts`.
 
 **Contract**:
+
 - `export const prerender = false;`
 - Oba handlery: jeśli `!context.locals.user` → `401 {error:"Unauthorized"}`. Pobranie `id` z `context.params.id`; walidacja zod, że to UUID → w razie błędu `400`.
 - `createClient(context.request.headers, context.cookies)`; jeśli `null` → `500 {error:"Database not configured"}`. Następnie **`await supabase.auth.getSession()`** przed zapytaniem.
@@ -107,6 +108,7 @@ SSR-owana strona `/flashcards.astro` ładuje listę z bazy i przekazuje ją do R
 **Intent**: Zarządzać stanem listy w przeglądarce: render kart, formularz tworzenia, delegacja edycji/usuwania do `FlashcardItem`, komunikaty `error`/`success`. Po udanej operacji aktualizować stan lokalny (bez pełnego reloadu), zachowując spójność z bazą.
 
 **Contract**:
+
 - Props: `initialCards: { id: string; front: string; back: string; created_at: string }[]`.
 - Stan: `cards` (zainicjowany `initialCards`), `error`, `success`, flagi zajętości.
 - Tworzenie: przycisk „Dodaj kartę" rozwija formularz (front + back, wzór `EditForm`); zapis `POST /api/flashcards` z `{cards:[{front,back}]}`. Endpoint zwraca `{saved}` (liczbę), **nie** rekord — po sukcesie pobrać świeżą listę lub dołożyć kartę optymistycznie; **wybrana strategia**: po sukcesie tworzenia wykonać `window.location.reload()`-free odświeżenie przez ponowne SSR nie jest możliwe z wyspy, więc dołożyć zwróconą kartę. Aby mieć `id`/`created_at` nowej karty bez zgadywania, rozszerzyć `POST /api/flashcards` o zwracanie utworzonych rekordów (patrz zmiana #4).
@@ -121,6 +123,7 @@ SSR-owana strona `/flashcards.astro` ładuje listę z bazy i przekazuje ją do R
 **Intent**: Render jednej karty w trybie podglądu / edycji / potwierdzania usunięcia, z wywołaniami API i delegacją wyniku w górę.
 
 **Contract**:
+
 - Props: `card`, `onSaved(card)`, `onDeleted(id)`.
 - Tryb podgląd: front (pogrubiony) + back + przyciski „Edytuj" i „Usuń" (wzór wizualny `CardReviewItem.tsx:89-113`).
 - Tryb edycji: reużyć wzorzec `EditForm` (lokalny front/back, walidacja `.trim()`); „Zapisz edycję" → `PATCH /api/flashcards/{id}` → po sukcesie `onSaved`.
@@ -142,6 +145,7 @@ SSR-owana strona `/flashcards.astro` ładuje listę z bazy i przekazuje ją do R
 **Intent**: Wymusić auth na `/flashcards` i dać użytkownikowi wejścia do kolekcji.
 
 **Contract**:
+
 - `middleware.ts`: dodać `"/flashcards"` do `PROTECTED_ROUTES`.
 - `dashboard.astro`: dodać link „Moja kolekcja" → `/flashcards` (wzór istniejącego linku „Generuj fiszki", `dashboard.astro:18-23`).
 - `generate.astro`: dodać link/powrót do `/flashcards` (po zapisaniu kart użytkownik trafia do kolekcji).
@@ -207,32 +211,32 @@ Brak. Schemat `flashcards` (F-01) już wspiera pełny CRUD i ma wymagane GRANT-y
 
 #### Automated
 
-- [x] 1.1 Type checking przechodzi: `npm run build`
-- [x] 1.2 Linting przechodzi: `npm run lint`
+- [x] 1.1 Type checking przechodzi: `npm run build` — 2e573b3
+- [x] 1.2 Linting przechodzi: `npm run lint` — 2e573b3
 
 #### Manual
 
-- [ ] 1.3 PATCH własnej karty zmienia ją i zwraca `{id}`; zmiana trwa po reloadzie
-- [ ] 1.4 DELETE własnej karty usuwa ją i zwraca `{deleted}`
-- [ ] 1.5 PATCH/DELETE z cudzym/nieistniejącym `id` → `404`, brak modyfikacji (izolacja kont)
-- [ ] 1.6 Niezalogowane żądanie → `401`
-- [ ] 1.7 Body bez `front`/`back` lub pusty string → `400`
+- [x] 1.3 PATCH własnej karty zmienia ją i zwraca `{id}`; zmiana trwa po reloadzie — 2e573b3
+- [x] 1.4 DELETE własnej karty usuwa ją i zwraca `{deleted}` — 2e573b3
+- [x] 1.5 PATCH/DELETE z cudzym/nieistniejącym `id` → `404`, brak modyfikacji (izolacja kont) — 2e573b3
+- [x] 1.6 Niezalogowane żądanie → `401` — 2e573b3
+- [x] 1.7 Body bez `front`/`back` lub pusty string → `400` — 2e573b3
 
 ### Phase 2: Strona kolekcji + komponenty UI
 
 #### Automated
 
-- [ ] 2.1 Build przechodzi: `npm run build`
-- [ ] 2.2 Linting przechodzi: `npm run lint`
-- [ ] 2.3 Formatowanie: `npm run format`
+- [x] 2.1 Build przechodzi: `npm run build`
+- [x] 2.2 Linting przechodzi: `npm run lint`
+- [x] 2.3 Formatowanie: `npm run format`
 
 #### Manual
 
-- [ ] 2.4 `/flashcards` pokazuje własne karty posortowane od najnowszej
-- [ ] 2.5 Niezalogowany na `/flashcards` → redirect `/auth/signin`
-- [ ] 2.6 „Dodaj kartę" zapisuje; karta trwa po reloadzie
-- [ ] 2.7 „Edytuj" zapisuje zmianę; zmiana trwa po reloadzie
-- [ ] 2.8 „Usuń → Na pewno? Tak" usuwa; „Anuluj" zostawia kartę; stan zgodny po reloadzie
-- [ ] 2.9 Pusta kolekcja → empty-state z linkiem do `/generate`
-- [ ] 2.10 Linki z dashboardu i `/generate` prowadzą do `/flashcards`
-- [ ] 2.11 Generowanie (S-01) bez regresji — `saved` poprawnie czytane z rozszerzonej odpowiedzi
+- [x] 2.4 `/flashcards` pokazuje własne karty posortowane od najnowszej
+- [x] 2.5 Niezalogowany na `/flashcards` → redirect `/auth/signin`
+- [x] 2.6 „Dodaj kartę" zapisuje; karta trwa po reloadzie
+- [x] 2.7 „Edytuj" zapisuje zmianę; zmiana trwa po reloadzie
+- [x] 2.8 „Usuń → Na pewno? Tak" usuwa; „Anuluj" zostawia kartę; stan zgodny po reloadzie
+- [x] 2.9 Pusta kolekcja → empty-state z linkiem do `/generate`
+- [x] 2.10 Linki z dashboardu i `/generate` prowadzą do `/flashcards`
+- [x] 2.11 Generowanie (S-01) bez regresji — `saved` poprawnie czytane z rozszerzonej odpowiedzi

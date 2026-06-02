@@ -16,13 +16,13 @@ Zalogowany użytkownik wchodzi na `/flashcards`, widzi swoje karty (najnowsze u 
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-| --- | --- | --- | --- |
-| Render listy | SSR + hydratacja React-island | Świeżość po reloadzie z definicji spełnia guardrail PRD | Plan |
-| Kształt API | Dynamiczny route `[id].ts` (PATCH + DELETE) | RESTowo czyste, izolacja przez RLS na `id` | Plan |
-| Ręczne tworzenie | Inline-formularz na stronie kolekcji | Jeden ekran, reuse istniejącego `POST` i wzorca `EditForm` | Plan |
-| Potwierdzenie usuwania | Inline dwustopniowe („Na pewno? Tak/Anuluj") | Zero zależności, dostępne, spójne z paletą cosmic | Plan |
-| Route i nawigacja | `/flashcards` + linki z dashboard i `/generate` | Czytelny URL spójny z `/generate` | Plan |
+| Decision               | Choice                                          | Why (1 sentence)                                           | Source |
+| ---------------------- | ----------------------------------------------- | ---------------------------------------------------------- | ------ |
+| Render listy           | SSR + hydratacja React-island                   | Świeżość po reloadzie z definicji spełnia guardrail PRD    | Plan   |
+| Kształt API            | Dynamiczny route `[id].ts` (PATCH + DELETE)     | RESTowo czyste, izolacja przez RLS na `id`                 | Plan   |
+| Ręczne tworzenie       | Inline-formularz na stronie kolekcji            | Jeden ekran, reuse istniejącego `POST` i wzorca `EditForm` | Plan   |
+| Potwierdzenie usuwania | Inline dwustopniowe („Na pewno? Tak/Anuluj")    | Zero zależności, dostępne, spójne z paletą cosmic          | Plan   |
+| Route i nawigacja      | `/flashcards` + linki z dashboard i `/generate` | Czytelny URL spójny z `/generate`                          | Plan   |
 
 ## Scope
 
@@ -36,9 +36,9 @@ Zalogowany użytkownik wchodzi na `/flashcards`, widzi swoje karty (najnowsze u 
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
-| 1. Warstwa API | `[id].ts` z PATCH + DELETE | Pominięcie `getSession()` → RLS odrzuca (reguła z lessons.md) |
+| Phase          | What it delivers                                                     | Key risk                                                                          |
+| -------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 1. Warstwa API | `[id].ts` z PATCH + DELETE                                           | Pominięcie `getSession()` → RLS odrzuca (reguła z lessons.md)                     |
 | 2. Strona + UI | `/flashcards` SSR + island (lista, create, edit, delete) + nawigacja | Regresja w odczycie `saved` przez `FlashcardGenerator` po zmianie odpowiedzi POST |
 
 **Prerequisites:** F-01 (db-schema) — gotowe. Brak innych zależności.

@@ -51,7 +51,7 @@ export const POST: APIRoute = async (context) => {
     user_id: user.id,
   }));
 
-  const { data, error } = await supabase.from("flashcards").insert(rows).select("id");
+  const { data, error } = await supabase.from("flashcards").insert(rows).select("id, front, back, created_at");
 
   if (error) {
     // eslint-disable-next-line no-console
@@ -59,5 +59,5 @@ export const POST: APIRoute = async (context) => {
     return Response.json({ error: "Failed to save flashcards" }, { status: 500 });
   }
 
-  return Response.json({ saved: data.length });
+  return Response.json({ saved: data.length, cards: data });
 };

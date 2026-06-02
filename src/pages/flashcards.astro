@@ -1,0 +1,44 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { FlashcardCollection } from "@/components/flashcards/FlashcardCollection";
+import { createClient } from "@/lib/supabase";
+import type { Flashcard } from "@/types";
+
+export const prerender = false;
+
+type CollectionCard = Pick<Flashcard, "id" | "front" | "back" | "created_at">;
+
+let initialCards: CollectionCard[] = [];
+
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+if (supabase) {
+  // Hydrate the session so the SELECT carries the user JWT — the RLS policy
+  // `USING (auth.uid() = user_id)` returns only this user's cards.
+  await supabase.auth.getSession();
+  const { data } = await supabase
+    .from("flashcards")
+    .select("id, front, back, created_at")
+    .order("created_at", { ascending: false });
+  initialCards = data ?? [];
+}
+---
+
+<Layout title="Moja kolekcja — 10xCards">
+  <div class="bg-cosmic min-h-screen py-8">
+    <div class="mx-auto mb-4 flex w-full max-w-2xl items-center justify-between gap-2 px-4">
+      <a
+        href="/dashboard"
+        class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-blue-100 transition-colors hover:bg-white/20"
+      >
+        ← Dashboard
+      </a>
+      <a
+        href="/generate"
+        class="rounded-lg border border-purple-400/40 bg-purple-500/20 px-4 py-2 text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/30"
+      >
+        Generuj fiszki
+      </a>
+    </div>
+    <FlashcardCollection client:load initialCards={initialCards} />
+  </div>
+</Layout>
