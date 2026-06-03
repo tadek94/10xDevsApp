@@ -29,7 +29,7 @@ top_blocker: capacity
 
 | ID   | Change ID            | Outcome (user can …)                                                            | Prerequisites | PRD refs                              | Status   |
 |------|----------------------|---------------------------------------------------------------------------------|---------------|---------------------------------------|----------|
-| F-01 | db-schema            | (foundation) schemat flashcards + RLS w Supabase                                | —             | NFR, FR-006, FR-007, FR-008           | ready    |
+| F-01 | db-schema            | (foundation) schemat flashcards + RLS w Supabase                                | —             | NFR, FR-006, FR-007, FR-008           | done     |
 | F-02 | openrouter-client    | (foundation) klient OpenRouter skonfigurowany + zmienne env AI                  | —             | FR-003, NFR                           | ready    |
 | S-01 | ai-generation-flow   | wkleić tekst, zobaczyć sugestie AI, zaakceptować/edytować/odrzucić, zapisać     | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004 | proposed |
 | S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | done     |
@@ -69,7 +69,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** Pola SRS (interval, ease_factor, due_date) zależą od wyboru biblioteki (FR-010). Rdzeń tabeli `flashcards` jest od tego niezależny i może powstać teraz; pola SRS zostaną dodane osobną migracją w ramach S-03. Block: no.
 - **Risk:** Musi być pierwsza — każda inna praca na danych na tym zależy. RLS wymagane przez NFR od dnia 1; pominięcie go teraz = poprawka pod presją, nie planowo.
-- **Status:** ready
+- **Status:** done
 
 ---
 
@@ -158,4 +158,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 (Puste przy pierwszym generowaniu. `/10x-archive` dopisuje wpis tutaj gdy zmiana o pasującym `Change ID` zostaje zarchiwizowana.)
 
+- **F-01: (foundation) migracja Supabase tworzy tabelę `flashcards` (id, user_id, front, back, created_at, updated_at) z RLS — każdy użytkownik widzi tylko swoje karty.** — Archived 2026-06-03 → `context/archive/2026-05-28-db-schema/`. Lesson: —.
 - **S-02: zalogowany użytkownik może zobaczyć swoje fiszki jako płaską listę, stworzyć kartę ręcznie (front + back), edytować dowolną zapisaną kartę oraz usunąć kartę po potwierdzeniu.** — Archived 2026-06-03 → `context/archive/2026-06-02-flashcard-collection/`. Lesson: —.
