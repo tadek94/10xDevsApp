@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-05-28
-updated: 2026-05-28
+updated: 2026-06-03
 prd_version: 1
 main_goal: speed
 top_blocker: capacity
@@ -32,7 +32,7 @@ top_blocker: capacity
 | F-01 | db-schema            | (foundation) schemat flashcards + RLS w Supabase                                | —             | NFR, FR-006, FR-007, FR-008           | ready    |
 | F-02 | openrouter-client    | (foundation) klient OpenRouter skonfigurowany + zmienne env AI                  | —             | FR-003, NFR                           | ready    |
 | S-01 | ai-generation-flow   | wkleić tekst, zobaczyć sugestie AI, zaakceptować/edytować/odrzucić, zapisać     | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004 | proposed |
-| S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | proposed |
+| S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | done     |
 | S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | blocked  |
 
 ## Streams
@@ -113,7 +113,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Niskie ryzyko techniczne (standard CRUD + Supabase). Guardrail PRD: zmiany kart muszą przeżyć przeładowanie — weryfikować każdą operację zapisu przez reload strony.
-- **Status:** proposed
+- **Status:** done
 
 ---
 
@@ -157,3 +157,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 ## Done
 
 (Puste przy pierwszym generowaniu. `/10x-archive` dopisuje wpis tutaj gdy zmiana o pasującym `Change ID` zostaje zarchiwizowana.)
+
+- **S-02: zalogowany użytkownik może zobaczyć swoje fiszki jako płaską listę, stworzyć kartę ręcznie (front + back), edytować dowolną zapisaną kartę oraz usunąć kartę po potwierdzeniu.** — Archived 2026-06-03 → `context/archive/2026-06-02-flashcard-collection/`. Lesson: —.

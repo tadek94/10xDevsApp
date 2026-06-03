@@ -1,10 +1,10 @@
 ---
 change_id: flashcard-collection
 title: Kolekcja fiszek — lista, ręczne tworzenie, edycja, usuwanie
-status: impl_reviewed
+status: archived
 created: 2026-06-02
-updated: 2026-06-02
-archived_at: null
+updated: 2026-06-03
+archived_at: 2026-06-03T12:50:04Z
 ---
 
 ## Notes
