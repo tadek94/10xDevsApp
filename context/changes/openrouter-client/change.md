@@ -1,9 +1,9 @@
 ---
 change_id: openrouter-client
 title: Openrouter client
-status: implemented
+status: impl_reviewed
 created: 2026-06-01
-updated: 2026-06-01
+updated: 2026-06-03
 archived_at: null
 ---
 
