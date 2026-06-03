@@ -31,7 +31,7 @@ top_blocker: capacity
 |------|----------------------|---------------------------------------------------------------------------------|---------------|---------------------------------------|----------|
 | F-01 | db-schema            | (foundation) schemat flashcards + RLS w Supabase                                | —             | NFR, FR-006, FR-007, FR-008           | done     |
 | F-02 | openrouter-client    | (foundation) klient OpenRouter skonfigurowany + zmienne env AI                  | —             | FR-003, NFR                           | done     |
-| S-01 | ai-generation-flow   | wkleić tekst, zobaczyć sugestie AI, zaakceptować/edytować/odrzucić, zapisać     | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004 | proposed |
+| S-01 | ai-generation-flow   | wkleić tekst, zobaczyć sugestie AI, zaakceptować/edytować/odrzucić, zapisać     | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004 | done     |
 | S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | done     |
 | S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | blocked  |
 
@@ -99,7 +99,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Czy wywołania AI mieszczą się w limicie CPU workerd (50ms free / 30s paid)? — Owner: user. Block: no (przygotować upgrade na plan paid przed deployem AI routes).
 - **Risk:** Rdzeń produktu i centralny test hipotezy AI — powinien być dostarczony jak najwcześniej. Opóźnienie o S-02 zostawia centralną hipotezę nieprzetestowaną do końca sprintu.
-- **Status:** proposed
+- **Status:** done
 
 ---
 
@@ -160,4 +160,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 - **F-01: (foundation) migracja Supabase tworzy tabelę `flashcards` (id, user_id, front, back, created_at, updated_at) z RLS — każdy użytkownik widzi tylko swoje karty.** — Archived 2026-06-03 → `context/archive/2026-05-28-db-schema/`. Lesson: —.
 - **F-02: (foundation) `src/lib/ai.ts` eksportuje gotowy klient OpenRouter; `OPENROUTER_API_KEY` dodany do `.dev.vars.example`, `.env.example` i walidacji schematu env.** — Archived 2026-06-03 → `context/archive/2026-06-01-openrouter-client/`. Lesson: —.
+- **S-01: zalogowany użytkownik może wkleić tekst źródłowy, zobaczyć sugestie fiszek wygenerowane przez AI (front + back), zaakceptować, edytować lub odrzucić każdą z nich z osobna, a zaakceptowane karty zapisują się do kolekcji i przeżywają przeładowanie strony.** — Archived 2026-06-03 → `context/archive/2026-06-01-ai-generation-flow/`. Lesson: —.
 - **S-02: zalogowany użytkownik może zobaczyć swoje fiszki jako płaską listę, stworzyć kartę ręcznie (front + back), edytować dowolną zapisaną kartę oraz usunąć kartę po potwierdzeniu.** — Archived 2026-06-03 → `context/archive/2026-06-02-flashcard-collection/`. Lesson: —.
