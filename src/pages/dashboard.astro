@@ -27,6 +27,12 @@ const { user } = Astro.locals;
         >
           Moja kolekcja
         </a>
+        <a
+          href="/review"
+          class="rounded-lg border border-emerald-400/40 bg-emerald-500/20 px-6 py-2 text-sm font-medium text-emerald-200 transition-colors hover:bg-emerald-500/30"
+        >
+          Sesja powtórek
+        </a>
         <form method="POST" action="/api/auth/signout">
           <button
             type="submit"

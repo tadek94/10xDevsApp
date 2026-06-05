@@ -307,25 +307,25 @@ Migracja tylko dodaje kolumny + indeks do istniejącej tabeli; istniejące wiers
 ### Phase 3: Trasy API (due + review)
 
 #### Automated
-- [x] 3.1 Lint przechodzi: `npm run lint`
-- [x] 3.2 Build przechodzi: `npm run build`
+- [x] 3.1 Lint przechodzi: `npm run lint` — db3cf1b
+- [x] 3.2 Build przechodzi: `npm run build` — db3cf1b
 
 #### Manual
-- [ ] 3.3 `GET /api/flashcards/due` zwraca tylko wymagalne, sort rosnąco po `srs_due`
-- [ ] 3.4 `POST .../review` przesuwa `srs_due` w przyszłość, zwraca pełną kartę, przeżywa reload
+- [x] 3.3 `GET /api/flashcards/due` zwraca tylko wymagalne, sort rosnąco po `srs_due` — db3cf1b
+- [x] 3.4 `POST .../review` przesuwa `srs_due` w przyszłość, zwraca pełną kartę, przeżywa reload — db3cf1b
 - [ ] 3.5 Zła ocena → 400; nieznane id → 404; brak sesji → 401
 - [ ] 3.6 NFR: karta innego konta → 404
 
 ### Phase 4: UI sesji powtórek
 
 #### Automated
-- [ ] 4.1 Lint przechodzi: `npm run lint`
-- [ ] 4.2 Build przechodzi: `npm run build`
+- [x] 4.1 Lint przechodzi: `npm run lint`
+- [x] 4.2 Build przechodzi: `npm run build`
 
 #### Manual
-- [ ] 4.3 `/review` chroniona (redirect signin), ładuje się dla zalogowanego
-- [ ] 4.4 Flip + 4 oceny działają, licznik postępu poprawny
-- [ ] 4.5 Wynik per-karta przeżywa reload w trakcie sesji
-- [ ] 4.6 Stan pusty gdy brak wymagalnych; notka małej talii (< 3) widoczna, sesja startuje
-- [ ] 4.7 Ekran końcowy po ostatniej karcie
-- [ ] 4.8 Linki z dashboardu i kolekcji prowadzą do `/review`
+- [x] 4.3 `/review` chroniona (redirect signin), ładuje się dla zalogowanego
+- [x] 4.4 Flip + 4 oceny działają, licznik postępu poprawny
+- [x] 4.5 Wynik per-karta przeżywa reload w trakcie sesji
+- [x] 4.6 Stan pusty gdy brak wymagalnych; notka małej talii (< 3) widoczna, sesja startuje
+- [x] 4.7 Ekran końcowy po ostatniej karcie
+- [x] 4.8 Linki z dashboardu i kolekcji prowadzą do `/review`

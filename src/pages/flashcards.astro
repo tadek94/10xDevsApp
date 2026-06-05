@@ -32,12 +32,20 @@ if (supabase) {
       >
         ← Dashboard
       </a>
-      <a
-        href="/generate"
-        class="rounded-lg border border-purple-400/40 bg-purple-500/20 px-4 py-2 text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/30"
-      >
-        Generuj fiszki
-      </a>
+      <div class="flex gap-2">
+        <a
+          href="/review"
+          class="rounded-lg border border-emerald-400/40 bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-200 transition-colors hover:bg-emerald-500/30"
+        >
+          Sesja powtórek
+        </a>
+        <a
+          href="/generate"
+          class="rounded-lg border border-purple-400/40 bg-purple-500/20 px-4 py-2 text-sm font-medium text-purple-200 transition-colors hover:bg-purple-500/30"
+        >
+          Generuj fiszki
+        </a>
+      </div>
     </div>
     <FlashcardCollection client:load initialCards={initialCards} />
   </div>
