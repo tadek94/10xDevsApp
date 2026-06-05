@@ -28,13 +28,16 @@ export type ReviewRating = "again" | "hard" | "good" | "easy";
 /** Lightweight card shape sent to the review UI — no SRS fields, no Date objects leak out. */
 export type ReviewCard = Pick<Flashcard, "id" | "front" | "back">;
 
-/** The SRS column subset persisted by the review flow. */
+/**
+ * The SRS column subset persisted by the review flow. Excludes `srs_elapsed_days`: ts-fsrs
+ * deprecates Card.elapsed_days (removed in v6) and recomputes it from last_review, so the
+ * column stays at its DB default and is not part of the round-trip.
+ */
 export type SrsState = Pick<
   Flashcard,
   | "srs_due"
   | "srs_stability"
   | "srs_difficulty"
-  | "srs_elapsed_days"
   | "srs_scheduled_days"
   | "srs_reps"
   | "srs_lapses"

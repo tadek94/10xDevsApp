@@ -286,23 +286,23 @@ Migracja tylko dodaje kolumny + indeks do istniejącej tabeli; istniejące wiers
 ### Phase 1: Migracja SRS + typy
 
 #### Automated
-- [x] 1.1 Migracja aplikuje się czysto: `npx supabase db push` (cloud)
-- [x] 1.2 Lint przechodzi: `npm run lint`
-- [x] 1.3 Build przechodzi: `npm run build`
+- [x] 1.1 Migracja aplikuje się czysto: `npx supabase db push` (cloud) — ed3bc49
+- [x] 1.2 Lint przechodzi: `npm run lint` — ed3bc49
+- [x] 1.3 Build przechodzi: `npm run build` — ed3bc49
 
 #### Manual
-- [x] 1.4 Tabela `flashcards` ma 9 nowych kolumn z defaultami i CHECK na `srs_state`
-- [x] 1.5 Istniejące karty mają `srs_state=0` i `srs_due ≈ now`
+- [x] 1.4 Tabela `flashcards` ma 9 nowych kolumn z defaultami i CHECK na `srs_state` — ed3bc49
+- [x] 1.5 Istniejące karty mają `srs_state=0` i `srs_due ≈ now` — ed3bc49
 
 ### Phase 2: Serwis SRS
 
 #### Automated
-- [ ] 2.1 `ts-fsrs` w `dependencies`; `npm install` czysty
-- [ ] 2.2 Lint przechodzi: `npm run lint`
-- [ ] 2.3 Build przechodzi: `npm run build`
+- [x] 2.1 `ts-fsrs` w `dependencies`; `npm install` czysty
+- [x] 2.2 Lint przechodzi: `npm run lint`
+- [x] 2.3 Build przechodzi: `npm run build`
 
 #### Manual
-- [ ] 2.4 `fromCard` używa wyłącznie `formatDate()`; `Date` nie wycieka poza moduł
+- [x] 2.4 `fromCard` używa wyłącznie `formatDate()`; `Date` nie wycieka poza moduł
 
 ### Phase 3: Trasy API (due + review)
 
