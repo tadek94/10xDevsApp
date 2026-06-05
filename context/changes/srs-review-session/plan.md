@@ -297,18 +297,18 @@ Migracja tylko dodaje kolumny + indeks do istniejącej tabeli; istniejące wiers
 ### Phase 2: Serwis SRS
 
 #### Automated
-- [x] 2.1 `ts-fsrs` w `dependencies`; `npm install` czysty
-- [x] 2.2 Lint przechodzi: `npm run lint`
-- [x] 2.3 Build przechodzi: `npm run build`
+- [x] 2.1 `ts-fsrs` w `dependencies`; `npm install` czysty — 54a4d37
+- [x] 2.2 Lint przechodzi: `npm run lint` — 54a4d37
+- [x] 2.3 Build przechodzi: `npm run build` — 54a4d37
 
 #### Manual
-- [x] 2.4 `fromCard` używa wyłącznie `formatDate()`; `Date` nie wycieka poza moduł
+- [x] 2.4 `fromCard` używa wyłącznie `formatDate()`; `Date` nie wycieka poza moduł — 54a4d37
 
 ### Phase 3: Trasy API (due + review)
 
 #### Automated
-- [ ] 3.1 Lint przechodzi: `npm run lint`
-- [ ] 3.2 Build przechodzi: `npm run build`
+- [x] 3.1 Lint przechodzi: `npm run lint`
+- [x] 3.2 Build przechodzi: `npm run build`
 
 #### Manual
 - [ ] 3.3 `GET /api/flashcards/due` zwraca tylko wymagalne, sort rosnąco po `srs_due`
