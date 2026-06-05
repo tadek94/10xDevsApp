@@ -319,13 +319,13 @@ Migracja tylko dodaje kolumny + indeks do istniejącej tabeli; istniejące wiers
 ### Phase 4: UI sesji powtórek
 
 #### Automated
-- [x] 4.1 Lint przechodzi: `npm run lint`
-- [x] 4.2 Build przechodzi: `npm run build`
+- [x] 4.1 Lint przechodzi: `npm run lint` — 193183b
+- [x] 4.2 Build przechodzi: `npm run build` — 193183b
 
 #### Manual
-- [x] 4.3 `/review` chroniona (redirect signin), ładuje się dla zalogowanego
-- [x] 4.4 Flip + 4 oceny działają, licznik postępu poprawny
-- [x] 4.5 Wynik per-karta przeżywa reload w trakcie sesji
-- [x] 4.6 Stan pusty gdy brak wymagalnych; notka małej talii (< 3) widoczna, sesja startuje
-- [x] 4.7 Ekran końcowy po ostatniej karcie
-- [x] 4.8 Linki z dashboardu i kolekcji prowadzą do `/review`
+- [x] 4.3 `/review` chroniona (redirect signin), ładuje się dla zalogowanego — 193183b
+- [x] 4.4 Flip + 4 oceny działają, licznik postępu poprawny — 193183b
+- [x] 4.5 Wynik per-karta przeżywa reload w trakcie sesji — 193183b
+- [x] 4.6 Stan pusty gdy brak wymagalnych; notka małej talii (< 3) widoczna, sesja startuje — 193183b
+- [x] 4.7 Ekran końcowy po ostatniej karcie — 193183b
+- [x] 4.8 Linki z dashboardu i kolekcji prowadzą do `/review` — 193183b
