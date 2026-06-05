@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-05-28
-updated: 2026-06-03
+updated: 2026-06-05
 prd_version: 1
 main_goal: speed
 top_blocker: capacity
@@ -23,7 +23,7 @@ top_blocker: capacity
 
 **S-03: Pełny flow pierwszej sesji** — zalogowany użytkownik wkleja tekst, AI generuje fiszki, użytkownik akceptuje lub odrzuca każdą z nich, a następnie od razu przechodzi do sesji powtórek metodą spaced repetition. To *gwiazda przewodnia* (ang. *north star*) — najmniejsze end-to-end przejście przez produkt, które, jeśli działa, udowadnia że produkt ma rację bytu; umieszczona jak najwcześniej w kolejności, bo reszta ma wartość tylko jeśli to działa. S-01 jest bezpośrednim krokiem poprzedzającym.
 
-> **Uwaga:** S-03 jest aktualnie zablokowany przez nierozstrzygniętą decyzję o bibliotece SRS (Open Roadmap Question #2). Pierwsza część gwiazdy (S-01) odblokuje się po F-01 + F-02.
+> **Uwaga:** S-01 (pierwsza część gwiazdy) jest `done`. S-03 odblokowany 2026-06-05 — wybór biblioteki SRS (Open Roadmap Question #2) został świadomie odroczony do `/10x-plan srs-review-session` zamiast blokować slice.
 
 ## At a glance
 
@@ -33,7 +33,7 @@ top_blocker: capacity
 | F-02 | openrouter-client    | (foundation) klient OpenRouter skonfigurowany + zmienne env AI                  | —             | FR-003, NFR                           | done     |
 | S-01 | ai-generation-flow   | wkleić tekst, zobaczyć sugestie AI, zaakceptować/edytować/odrzucić, zapisać     | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004 | done     |
 | S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | done     |
-| S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | blocked  |
+| S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | ready    |
 
 ## Streams
 
@@ -41,7 +41,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 
 | Stream | Theme               | Chain                              | Note                                                                                      |
 |--------|---------------------|------------------------------------|-------------------------------------------------------------------------------------------|
-| A      | Gwiazda przewodnia  | `F-01` / `F-02` → `S-01` → `S-03` | Krytyczna ścieżka do pełnego flow; F-01 i F-02 równolegle, S-03 zablokowany do wyboru SRS. |
+| A      | Gwiazda przewodnia  | `F-01` / `F-02` → `S-01` → `S-03` | Krytyczna ścieżka do pełnego flow; F-01 i F-02 równolegle, S-03 odblokowany (wybór SRS rozstrzygany w planie). |
 | B      | Zarządzanie kartami | `S-02`                             | Rozgałęzia się od F-01 (Stream A); startuje po F-01, niezależnie od F-02 i S-01.         |
 
 ## Baseline
@@ -126,9 +126,9 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Parallel with:** —
 - **Blockers:** —
 - **Unknowns:**
-  - Wybór biblioteki SRS (FR-010 eksplicytnie odracza decyzję) — Owner: user. Block: yes. Schemat pól SRS (interval, ease_factor, due_date) zależy od wybranej biblioteki; nie można zaprojektować migracji SRS bez tej decyzji.
-- **Risk:** Jedyna zewnętrzna zależność nierozstrzygnięta w PRD. Późny wybór blokuje zarówno S-03, jak i pola SRS w kolejnej migracji po F-01. Kandydaci: `ts-fsrs` (SM-2/SM-5, TypeScript-native) lub prosty harmonogram 1d→3d→7d (zero zewnętrznych zależności, prostszy schemat).
-- **Status:** blocked
+  - Wybór biblioteki SRS (FR-010 eksplicytnie odracza decyzję) — Owner: user. Block: no (odroczone do `/10x-plan srs-review-session` — slice świadomie odblokowany 2026-06-05 przed podjęciem decyzji). Schemat pól SRS (interval, ease_factor, due_date) zależy od wybranej biblioteki; migracja SRS powstanie po rozstrzygnięciu w fazie planowania.
+- **Risk:** Jedyna zewnętrzna zależność nierozstrzygnięta w PRD. Decyzja o bibliotece przeniesiona do fazy planowania; jej zwłoka opóźni projekt schematu pól SRS. Kandydaci: `ts-fsrs` (SM-2/SM-5, TypeScript-native) lub prosty harmonogram 1d→3d→7d (zero zewnętrznych zależności, prostszy schemat).
+- **Status:** ready
 
 ## Backlog Handoff
 
@@ -138,13 +138,13 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | F-02       | openrouter-client    | Konfiguracja klienta OpenRouter + zmienne env AI            | yes                   | Uruchom `/10x-plan openrouter-client`                           |
 | S-01       | ai-generation-flow   | Generowanie fiszek z tekstu przez AI + przegląd i zapis     | no                    | Wymaga F-01 + F-02                                              |
 | S-02       | flashcard-collection | Kolekcja fiszek: widok, tworzenie ręczne, edycja, usunięcie | no                    | Wymaga F-01                                                     |
-| S-03       | srs-review-session   | Sesja powtórek SRS                                          | no                    | Zablokowany — wybierz bibliotekę SRS (Open Roadmap Question #2) |
+| S-03       | srs-review-session   | Sesja powtórek SRS                                          | yes                   | Odblokowany; wybór biblioteki SRS (Question #2) rozstrzygany w `/10x-plan` |
 
 ## Open Roadmap Questions
 
 1. **Polityka retencji tekstu źródłowego** — Czy użytkownicy wklejający poufny materiał (notatki medyczne, briefingi prawne) wymagają gwarancji, że tekst nie jest przechowywany po zakończeniu generowania? PRD: nie blokuje MVP, ale decyzja powinna zapaść przed skalowaniem do profesjonalnych użytkowników. Owner: user. Block: nie blokuje żadnego slica MVP.
 
-2. **Wybór biblioteki SRS** — Która biblioteka implementuje algorytm spaced repetition? Kandydaci: `ts-fsrs` (SM-2/SM-5, TypeScript-native, aktywnie utrzymywana) lub prosty harmonogram interwałowy (1d→3d→7d, zero zewnętrznych zależności). Decyzja determinuje schemat pól SRS w kolejnej migracji po F-01 i architekturę S-03. Owner: user. Block: S-03.
+2. **Wybór biblioteki SRS** — Która biblioteka implementuje algorytm spaced repetition? Kandydaci: `ts-fsrs` (SM-2/SM-5, TypeScript-native, aktywnie utrzymywana) lub prosty harmonogram interwałowy (1d→3d→7d, zero zewnętrznych zależności). Decyzja determinuje schemat pól SRS w kolejnej migracji po F-01 i architekturę S-03. Owner: user. Block: nie blokuje już S-03 (odroczone 2026-06-05 do `/10x-plan srs-review-session`); decyzja wciąż otwarta i musi zapaść w fazie planowania.
 
 ## Parked
 
