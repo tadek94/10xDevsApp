@@ -34,6 +34,7 @@ top_blocker: capacity
 | S-01 | ai-generation-flow   | wkleić tekst, zobaczyć sugestie AI, zaakceptować/edytować/odrzucić, zapisać     | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004 | done     |
 | S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | done     |
 | S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | done     |
+| S-04 | account-deletion     | trwale usunąć konto wraz ze wszystkimi danymi (RODO art. 17)                    | F-01          | FR-011 (proponowany), NFR             | ready    |
 
 ## Streams
 
@@ -43,6 +44,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 |--------|---------------------|------------------------------------|-------------------------------------------------------------------------------------------|
 | A      | Gwiazda przewodnia  | `F-01` / `F-02` → `S-01` → `S-03` | Krytyczna ścieżka do pełnego flow; F-01 i F-02 równolegle, S-03 odblokowany (wybór SRS rozstrzygany w planie). |
 | B      | Zarządzanie kartami | `S-02`                             | Rozgałęzia się od F-01 (Stream A); startuje po F-01, niezależnie od F-02 i S-01.         |
+| C      | Cykl życia konta    | `S-04`                             | Domyka cykl konta (tworzenie istnieje od FR-001). Zależny od F-01 + istniejącego auth; niezależny od pozostałych slice'ów. |
 
 ## Baseline
 
@@ -130,6 +132,22 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** Jedyna zewnętrzna zależność nierozstrzygnięta w PRD. Decyzja o bibliotece przeniesiona do fazy planowania; jej zwłoka opóźni projekt schematu pól SRS. Kandydaci: `ts-fsrs` (SM-2/SM-5, TypeScript-native) lub prosty harmonogram 1d→3d→7d (zero zewnętrznych zależności, prostszy schemat).
 - **Status:** done
 
+---
+
+### S-04: Usuwanie konta (RODO)
+
+- **Outcome:** zalogowany użytkownik może trwale usunąć swoje konto wraz ze wszystkimi danymi (fiszki + historia powtórek) po wyraźnym potwierdzeniu; po usunięciu zostaje wylogowany i nie może się ponownie zalogować tym kontem. Realizuje RODO art. 17 („prawo do bycia zapomnianym") i domyka cykl życia konta zapoczątkowany przez FR-001.
+- **Change ID:** account-deletion
+- **PRD refs:** FR-011 (proponowany — RODO art. 17; PRD do aktualizacji), NFR (izolacja kont — po usunięciu dane nie istnieją pod żadną ścieżką żądania)
+- **Prerequisites:** F-01 (tabela `flashcards` z FK `ON DELETE CASCADE` na `auth.users` — kaskada już istnieje), istniejący auth (signin/signout/middleware)
+- **Parallel with:** — (MVP slices done; brak aktywnych równoległych)
+- **Blockers:** —
+- **Unknowns:**
+  - **Mechanizm usunięcia rekordu z `auth.users`** — klient SSR używa anon `SUPABASE_KEY` i NIE ma uprawnień do `auth.admin.deleteUser`. Dwie opcje: **(a)** osobny klient admin z nowym sekretem `SUPABASE_SERVICE_ROLE_KEY` (tylko server-side, nigdy do przeglądarki) wywołujący `supabase.auth.admin.deleteUser(userId)` — oficjalnie wspierana ścieżka; **(b)** Postgres RPC `SECURITY DEFINER` kasująca self z `auth.users`, wywoływana przez zalogowanego usera (bez nowego sekretu, ale custom SQL na schemacie auth). Owner: user. Block: tak — determinuje, czy do produkcji trafia nowy sekret. Rozstrzygane w `/10x-plan account-deletion`. Rekomendacja: opcja (a).
+  - **Twarde czy miękkie usunięcie?** RODO art. 17 sugeruje trwałe usunięcie bez zbędnej zwłoki. Rekomendacja: hard delete + cascade (bez okresu karencji w MVP). Owner: user. Block: no.
+- **Risk:** Operacja nieodwracalna i regulowana prawnie. Wymaga: (1) wyraźnego potwierdzenia jak w FR-008 (np. wpisanie e-maila lub słowa „USUŃ"), (2) pewności że cascade kasuje WSZYSTKIE tabele zależne — obecnie tylko `flashcards`; przy dodaniu nowych tabel pilnować `ON DELETE CASCADE`, (3) `SUPABASE_SERVICE_ROLE_KEY` to sekret o pełnych uprawnieniach — per Deployment rules: tylko env var, nigdy w trackowanym pliku, dodawany ręcznie do produkcji. Verify: po usunięciu konta ponowne logowanie = odmowa; dane nieosiągalne pod żadną ścieżką (NFR).
+- **Status:** ready
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID            | Suggested issue title                                       | Ready for `/10x-plan` | Notes                                                           |
@@ -139,12 +157,17 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-01       | ai-generation-flow   | Generowanie fiszek z tekstu przez AI + przegląd i zapis     | no                    | Wymaga F-01 + F-02                                              |
 | S-02       | flashcard-collection | Kolekcja fiszek: widok, tworzenie ręczne, edycja, usunięcie | no                    | Wymaga F-01                                                     |
 | S-03       | srs-review-session   | Sesja powtórek SRS                                          | yes                   | Odblokowany; wybór biblioteki SRS (Question #2) rozstrzygany w `/10x-plan` |
+| S-04       | account-deletion     | Usuwanie konta (RODO art. 17) z kaskadą danych             | yes                   | Mechanizm usunięcia z `auth.users` (Question #3) rozstrzygany w `/10x-plan`; PRD wymaga dopisania FR-011 |
 
 ## Open Roadmap Questions
 
 1. **Polityka retencji tekstu źródłowego** — Czy użytkownicy wklejający poufny materiał (notatki medyczne, briefingi prawne) wymagają gwarancji, że tekst nie jest przechowywany po zakończeniu generowania? PRD: nie blokuje MVP, ale decyzja powinna zapaść przed skalowaniem do profesjonalnych użytkowników. Owner: user. Block: nie blokuje żadnego slica MVP.
 
 2. **Wybór biblioteki SRS** — ✅ ROZSTRZYGNIĘTE 2026-06-06: wybrano **`ts-fsrs`** (FSRS, TypeScript-native, aktywnie utrzymywana). Odrzucony kandydat: prosty harmonogram interwałowy (1d→3d→7d). Schemat pól SRS i architekturę S-03 zaimplementowano na bazie `ts-fsrs` — zob. `context/archive/2026-06-05-srs-review-session/`.
+
+3. **Mechanizm usunięcia konta (S-04)** — Jak skasować rekord z `auth.users`, skoro klient SSR używa anon `SUPABASE_KEY`? Opcje: (a) klient admin z `SUPABASE_SERVICE_ROLE_KEY` + `auth.admin.deleteUser()` (nowy sekret w produkcji, ścieżka oficjalna); (b) Postgres RPC `SECURITY DEFINER` (bez nowego sekretu, custom SQL na schemacie auth). Determinuje, czy do produkcji trafia nowy sekret o pełnych uprawnieniach. Owner: user. Block: tak dla S-04 — rozstrzygane w `/10x-plan account-deletion`. Rekomendacja: opcja (a).
+
+4. **Aktualizacja PRD o usuwanie konta** — PRD v1 nie zawiera wymagania usuwania konta (tylko FR-001 tworzenie). S-04 wprowadza proponowany FR-011 (RODO art. 17). PRD należy zaktualizować, by wymaganie miało źródło. Owner: user. Block: nie blokuje implementacji S-04, ale powinno zostać domknięte dla spójności dokumentacji.
 
 ## Parked
 
