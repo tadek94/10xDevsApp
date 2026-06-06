@@ -144,7 +144,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 1. **Polityka retencji tekstu źródłowego** — Czy użytkownicy wklejający poufny materiał (notatki medyczne, briefingi prawne) wymagają gwarancji, że tekst nie jest przechowywany po zakończeniu generowania? PRD: nie blokuje MVP, ale decyzja powinna zapaść przed skalowaniem do profesjonalnych użytkowników. Owner: user. Block: nie blokuje żadnego slica MVP.
 
-2. **Wybór biblioteki SRS** — Która biblioteka implementuje algorytm spaced repetition? Kandydaci: `ts-fsrs` (SM-2/SM-5, TypeScript-native, aktywnie utrzymywana) lub prosty harmonogram interwałowy (1d→3d→7d, zero zewnętrznych zależności). Decyzja determinuje schemat pól SRS w kolejnej migracji po F-01 i architekturę S-03. Owner: user. Block: nie blokuje już S-03 (odroczone 2026-06-05 do `/10x-plan srs-review-session`); decyzja wciąż otwarta i musi zapaść w fazie planowania.
+2. **Wybór biblioteki SRS** — ✅ ROZSTRZYGNIĘTE 2026-06-06: wybrano **`ts-fsrs`** (FSRS, TypeScript-native, aktywnie utrzymywana). Odrzucony kandydat: prosty harmonogram interwałowy (1d→3d→7d). Schemat pól SRS i architekturę S-03 zaimplementowano na bazie `ts-fsrs` — zob. `context/archive/2026-06-05-srs-review-session/`.
 
 ## Parked
 
