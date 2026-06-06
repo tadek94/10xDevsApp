@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-05-28
-updated: 2026-06-05
+updated: 2026-06-06
 prd_version: 1
 main_goal: speed
 top_blocker: capacity
@@ -33,7 +33,7 @@ top_blocker: capacity
 | F-02 | openrouter-client    | (foundation) klient OpenRouter skonfigurowany + zmienne env AI                  | —             | FR-003, NFR                           | done     |
 | S-01 | ai-generation-flow   | wkleić tekst, zobaczyć sugestie AI, zaakceptować/edytować/odrzucić, zapisać     | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004 | done     |
 | S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | done     |
-| S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | ready    |
+| S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | done     |
 
 ## Streams
 
@@ -128,7 +128,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Wybór biblioteki SRS (FR-010 eksplicytnie odracza decyzję) — Owner: user. Block: no (odroczone do `/10x-plan srs-review-session` — slice świadomie odblokowany 2026-06-05 przed podjęciem decyzji). Schemat pól SRS (interval, ease_factor, due_date) zależy od wybranej biblioteki; migracja SRS powstanie po rozstrzygnięciu w fazie planowania.
 - **Risk:** Jedyna zewnętrzna zależność nierozstrzygnięta w PRD. Decyzja o bibliotece przeniesiona do fazy planowania; jej zwłoka opóźni projekt schematu pól SRS. Kandydaci: `ts-fsrs` (SM-2/SM-5, TypeScript-native) lub prosty harmonogram 1d→3d→7d (zero zewnętrznych zależności, prostszy schemat).
-- **Status:** ready
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -162,3 +162,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **F-02: (foundation) `src/lib/ai.ts` eksportuje gotowy klient OpenRouter; `OPENROUTER_API_KEY` dodany do `.dev.vars.example`, `.env.example` i walidacji schematu env.** — Archived 2026-06-03 → `context/archive/2026-06-01-openrouter-client/`. Lesson: —.
 - **S-01: zalogowany użytkownik może wkleić tekst źródłowy, zobaczyć sugestie fiszek wygenerowane przez AI (front + back), zaakceptować, edytować lub odrzucić każdą z nich z osobna, a zaakceptowane karty zapisują się do kolekcji i przeżywają przeładowanie strony.** — Archived 2026-06-03 → `context/archive/2026-06-01-ai-generation-flow/`. Lesson: —.
 - **S-02: zalogowany użytkownik może zobaczyć swoje fiszki jako płaską listę, stworzyć kartę ręcznie (front + back), edytować dowolną zapisaną kartę oraz usunąć kartę po potwierdzeniu.** — Archived 2026-06-03 → `context/archive/2026-06-02-flashcard-collection/`. Lesson: —.
+- **S-03: zalogowany użytkownik może uruchomić sesję spaced repetition na swoich zapisanych fiszkach; aplikacja pokazuje karty w kolejności wyznaczonej przez algorytm SRS i zapamiętuje wyniki do następnej sesji.** — Archived 2026-06-06 → `context/archive/2026-06-05-srs-review-session/`. Lesson: —.
