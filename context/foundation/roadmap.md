@@ -35,7 +35,7 @@ top_blocker: capacity
 | S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | done     |
 | S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | done     |
 | S-04 | account-deletion     | trwale usunąć konto wraz ze wszystkimi danymi (RODO art. 17)                    | F-01          | FR-011 (proponowany), NFR             | ready    |
-| S-05 | ux-polish            | czytelniejszy dashboard z krótkim opisem każdej opcji; drobne poprawki UX       | S-01,S-02,S-03| — (usability)                         | ready    |
+| S-05 | ux-polish            | czytelniejszy dashboard z krótkim opisem każdej opcji; drobne poprawki UX       | S-01,S-02,S-03| — (usability)                         | done     |
 
 ## Streams
 
@@ -165,7 +165,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - **Zakres poza dashboardem** — które dodatkowe drobne poprawki UX wchodzą (np. spójność nagłówków między ekranami, empty-states, responsywność, focus/hover)? Owner: user. Block: no — zakres MUSI zostać zamknięty w `/10x-plan` (lista konkretnych poprawek), żeby uniknąć rozlewania zakresu.
   - **Ikony per opcja** — czy dodać ikony (lucide-react już dostępne przez shadcn) czy zostać przy samym tekście? Owner: user. Block: no.
 - **Risk:** Slice „polish" jest najbardziej podatny na **scope creep** — bez zamkniętej listy poprawek rośnie w nieskończoność. Guardrail: rdzeniem i kryterium akceptacji jest dashboard z opisami opcji; reszta tylko z zamkniętej listy w planie. Niskie ryzyko techniczne — statyczny `.astro` + Tailwind (ewentualnie shadcn `card`), bez zmian w danych/API/migracjach. Verify: dashboard pokazuje opis przy każdej opcji; istniejące przepływy (generowanie/kolekcja/powtórki) działają jak wcześniej.
-- **Status:** ready
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -206,3 +206,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **S-01: zalogowany użytkownik może wkleić tekst źródłowy, zobaczyć sugestie fiszek wygenerowane przez AI (front + back), zaakceptować, edytować lub odrzucić każdą z nich z osobna, a zaakceptowane karty zapisują się do kolekcji i przeżywają przeładowanie strony.** — Archived 2026-06-03 → `context/archive/2026-06-01-ai-generation-flow/`. Lesson: —.
 - **S-02: zalogowany użytkownik może zobaczyć swoje fiszki jako płaską listę, stworzyć kartę ręcznie (front + back), edytować dowolną zapisaną kartę oraz usunąć kartę po potwierdzeniu.** — Archived 2026-06-03 → `context/archive/2026-06-02-flashcard-collection/`. Lesson: —.
 - **S-03: zalogowany użytkownik może uruchomić sesję spaced repetition na swoich zapisanych fiszkach; aplikacja pokazuje karty w kolejności wyznaczonej przez algorytm SRS i zapamiętuje wyniki do następnej sesji.** — Archived 2026-06-06 → `context/archive/2026-06-05-srs-review-session/`. Lesson: —.
+- **S-05: zalogowany użytkownik widzi czytelniejszy, bardziej zachęcający dashboard — każda opcja (Generuj fiszki, Moja kolekcja, Sesja powtórek) ma krótki opis (kilka słów) wyjaśniający co robi, a układ prowadzi wzrok do głównej akcji zamiast płaskiej listy linków.** — Archived 2026-06-06 → `context/archive/2026-06-06-ux-polish/`. Lesson: —.

@@ -1,18 +1,12 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { FlashcardGenerator } from "@/components/flashcards/FlashcardGenerator";
+import ScreenNav from "@/components/ScreenNav.astro";
 ---
 
 <Layout title="Generuj fiszki — 10xCards">
   <div class="bg-cosmic min-h-screen py-8">
-    <div class="mx-auto mb-4 flex w-full max-w-2xl justify-end px-4">
-      <a
-        href="/flashcards"
-        class="rounded-lg border border-blue-400/40 bg-blue-500/20 px-4 py-2 text-sm font-medium text-blue-200 transition-colors hover:bg-blue-500/30"
-      >
-        Moja kolekcja
-      </a>
-    </div>
+    <ScreenNav current="generate" />
     <FlashcardGenerator client:load />
   </div>
 </Layout>
