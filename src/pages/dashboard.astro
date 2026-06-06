@@ -106,7 +106,13 @@ const { user } = Astro.locals;
         </a>
       </div>
 
-      <div class="mt-8 flex justify-center">
+      <div class="mt-8 flex items-center justify-center gap-3">
+        <a
+          href="/account"
+          class="rounded-lg border border-white/20 bg-white/5 px-6 py-2 text-sm font-medium text-blue-100/80 transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+        >
+          Ustawienia konta
+        </a>
         <form method="POST" action="/api/auth/signout">
           <button
             type="submit"

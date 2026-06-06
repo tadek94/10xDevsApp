@@ -1,8 +1,12 @@
 ---
 import Welcome from "@/components/Welcome.astro";
+import Banner from "@/components/Banner.astro";
 import Layout from "@/layouts/Layout.astro";
+
+const accountDeleted = Astro.url.searchParams.get("deleted") === "1";
 ---
 
 <Layout title="10xCards — nauka języków z fiszkami AI">
+  {accountDeleted && <Banner variant="info">Twoje konto zostało trwale usunięte.</Banner>}
   <Welcome />
 </Layout>
