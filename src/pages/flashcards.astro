@@ -15,10 +15,15 @@ if (supabase) {
   // Hydrate the session so the SELECT carries the user JWT — the RLS policy
   // `USING (auth.uid() = user_id)` returns only this user's cards.
   await supabase.auth.getSession();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("flashcards")
     .select("id, front, back, created_at")
     .order("created_at", { ascending: false });
+  if (error) {
+    // Surface DB errors in logs instead of silently rendering an empty collection.
+    // eslint-disable-next-line no-console
+    console.error(error);
+  }
   initialCards = data ?? [];
 }
 ---

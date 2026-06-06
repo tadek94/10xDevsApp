@@ -64,10 +64,14 @@ export const POST: APIRoute = async (context) => {
 
   const next = review(rows[0], parsed.data.rating, new Date());
 
+  // Optimistic concurrency guard: srs_reps increases monotonically on every review,
+  // so matching the value we just read serializes concurrent reviews of the same card
+  // (the read-modify-write between SELECT and UPDATE is otherwise non-atomic).
   const { data, error } = await supabase
     .from("flashcards")
     .update(next)
     .eq("id", id.data)
+    .eq("srs_reps", rows[0].srs_reps)
     .select("id, front, back, srs_due");
 
   if (error) {
@@ -77,7 +81,9 @@ export const POST: APIRoute = async (context) => {
   }
 
   if (data.length === 0) {
-    return Response.json({ error: "Not found" }, { status: 404 });
+    // The card existed at SELECT (we passed the 404 above), so an empty UPDATE means a
+    // concurrent review bumped srs_reps first — surface as a conflict so the client retries.
+    return Response.json({ error: "Conflict — card was reviewed concurrently" }, { status: 409 });
   }
 
   return Response.json({ card: data[0] });

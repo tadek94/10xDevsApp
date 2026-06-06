@@ -115,7 +115,9 @@ Zainstalować `ts-fsrs`, stworzyć funkcyjny moduł będący jedynym właścicie
 - `toCard(row: SrsState): Card` — buduje Card **startując od `createEmptyCard()`** i nadpisując utrwalone pola; `srs_due`/`srs_last_review` (stringi ISO) → `new Date(...)`, `srs_last_review` null → `undefined`. (Patrz Critical Implementation Details — odporność na wersję biblioteki; uzasadnia jedyny snippet w planie.)
 - `fromCard(card: Card): SrsState` — zwraca obiekt kolumn `srs_*` do `UPDATE`; daty przez `formatDate(card.due)` / `card.last_review ? formatDate(card.last_review) : null`.
 - `review(row: SrsState, rating: ReviewRating, now: Date): SrsState` — `scheduler.next(toCard(row), now, RATING_MAP[rating]).card` → `fromCard(...)`.
-- `SrsState` to typ obejmujący 9 pól `srs_*` (alias/`Pick` z `Flashcard`).
+- `SrsState` to typ obejmujący pola `srs_*` (alias/`Pick` z `Flashcard`).
+
+> **Uwaga (impl-review 2026-06-06, F4):** `SrsState` celowo **pomija `srs_elapsed_days`** — w sumie 8 pól, nie 9. Kolumna `srs_elapsed_days` istnieje w schemacie (migracja, z defaultem) dla kompletności i ewentualnej przyszłej analityki, ale ts-fsrs deprecjonuje `Card.elapsed_days` i przelicza je z `last_review`, więc utrwalanie go w stanie roboczym byłoby martwym polem. Pominięcie jest spójnie zastosowane w `srs.ts` (`toCard`/`fromCard`) i `review.ts` (`SRS_COLUMNS`).
 
 Snippet (kontrakt `toCard`, bo nieoczywisty i load-bearing dla `next()`):
 ```typescript
@@ -162,6 +164,8 @@ Dwystawić pobranie kart wymagalnych oraz zapis oceny pojedynczej karty, mirroru
 **Intent**: Zwrócić karty użytkownika wymagalne teraz, w kolejności FSRS (rosnąco po `srs_due`), jako lekki kontrakt `ReviewCard` (bez pól SRS).
 
 **Contract**: `GET`, `prerender = false`. 401 gdy brak `context.locals.user`. `createClient` → `getSession()` → `.from("flashcards").select("id, front, back").lte("srs_due", formatDate(new Date())).order("srs_due", { ascending: true })`. Zwraca `{ cards: ReviewCard[] }`. Filtr czasu przez `formatDate(new Date())` (reguła dat).
+
+> **Uwaga (impl-review 2026-06-06, F1):** Endpoint jest **API-only** — obecny UI go nie konsumuje. `review.astro` pobiera karty wymagalne własnym zapytaniem SSR i przekazuje je do wyspy jako `initialCards`, więc `ReviewSession` jedzie na snapshotcie i nie woła `GET /api/flashcards/due`. Endpoint zostaje jako gotowa powierzchnia pod przyszły dynamiczny refresh (re-fetch bez reloadu); mirroruje wzorzec `flashcards/index.ts` (GET niezależny od SSR). Podpięcie wyspy pod ten endpoint to osobny slice, nie część S-03.
 
 #### 2. Endpoint oceny
 **File**: `src/pages/api/flashcards/[id]/review.ts` (nowy, zagnieżdżony katalog `[id]/`)

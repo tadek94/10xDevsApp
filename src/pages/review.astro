@@ -14,11 +14,16 @@ if (supabase) {
   // Hydrate the session so the SELECT carries the user JWT — RLS returns only this user's cards.
   await supabase.auth.getSession();
   // Due cards in SRS order: srs_due <= now, ascending.
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("flashcards")
     .select("id, front, back")
     .lte("srs_due", formatDate(new Date()))
     .order("srs_due", { ascending: true });
+  if (error) {
+    // Surface DB errors in logs instead of silently rendering an empty session.
+    // eslint-disable-next-line no-console
+    console.error(error);
+  }
   initialCards = data ?? [];
 }
 ---
