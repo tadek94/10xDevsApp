@@ -256,31 +256,31 @@ No database migration. **Deployment:** add `SUPABASE_SERVICE_ROLE_KEY` to the pr
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run lint`
-- [x] 1.2 Production build succeeds: `npm run build`
+- [x] 1.1 Type checking passes: `npm run lint` — 84e7019
+- [x] 1.2 Production build succeeds: `npm run build` — 84e7019
 
 #### Manual
 
-- [x] 1.3 Deletion succeeds: returns `{ ok: true }`, removes `auth.users` row, cascades flashcards
-- [x] 1.4 Re-login with deleted account is refused
-- [x] 1.5 Missing secret → 500 "not configured", user not logged out
-- [x] 1.6 Simulated failure keeps session intact and returns an error
+- [x] 1.3 Deletion succeeds: returns `{ ok: true }`, removes `auth.users` row, cascades flashcards — 84e7019
+- [x] 1.4 Re-login with deleted account is refused — 84e7019
+- [x] 1.5 Missing secret → 500 "not configured", user not logged out — 84e7019
+- [x] 1.6 Simulated failure keeps session intact and returns an error — 84e7019
 
 ### Phase 2: Frontend — /account page & delete flow
 
 #### Automated
 
-- [ ] 2.1 Linting passes: `npm run lint`
-- [ ] 2.2 Production build succeeds: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint`
+- [x] 2.2 Production build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 2.3 `/account` redirects to sign-in when logged out
-- [ ] 2.4 Delete button disabled until checkbox ticked
-- [ ] 2.5 Successful flow lands on `/` with "account deleted" notice
-- [ ] 2.6 Protected routes redirect to sign-in after deletion
-- [ ] 2.7 Failed deletion shows inline error, user stays logged in on `/account`
-- [ ] 2.8 Dashboard shows a working link to `/account`
+- [x] 2.3 `/account` redirects to sign-in when logged out
+- [x] 2.4 Delete button disabled until checkbox ticked
+- [x] 2.5 Successful flow lands on `/` with "account deleted" notice
+- [x] 2.6 Protected routes redirect to sign-in after deletion
+- [x] 2.7 Failed deletion shows inline error, user stays logged in on `/account`
+- [x] 2.8 Dashboard shows a working link to `/account`
 
 ### Phase 3: PRD update — FR-011
 
