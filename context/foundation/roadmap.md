@@ -35,6 +35,7 @@ top_blocker: capacity
 | S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | done     |
 | S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | done     |
 | S-04 | account-deletion     | trwale usunąć konto wraz ze wszystkimi danymi (RODO art. 17)                    | F-01          | FR-011 (proponowany), NFR             | ready    |
+| S-05 | ux-polish            | czytelniejszy dashboard z krótkim opisem każdej opcji; drobne poprawki UX       | S-01,S-02,S-03| — (usability)                         | ready    |
 
 ## Streams
 
@@ -45,6 +46,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | A      | Gwiazda przewodnia  | `F-01` / `F-02` → `S-01` → `S-03` | Krytyczna ścieżka do pełnego flow; F-01 i F-02 równolegle, S-03 odblokowany (wybór SRS rozstrzygany w planie). |
 | B      | Zarządzanie kartami | `S-02`                             | Rozgałęzia się od F-01 (Stream A); startuje po F-01, niezależnie od F-02 i S-01.         |
 | C      | Cykl życia konta    | `S-04`                             | Domyka cykl konta (tworzenie istnieje od FR-001). Zależny od F-01 + istniejącego auth; niezależny od pozostałych slice'ów. |
+| D      | Dopracowanie / UX   | `S-05`                             | Polish istniejących ekranów. Zależny od S-01/S-02/S-03 (opisuje ich opcje); niezależny od S-04 — może iść równolegle. |
 
 ## Baseline
 
@@ -148,6 +150,23 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Risk:** Operacja nieodwracalna i regulowana prawnie. Wymaga: (1) wyraźnego potwierdzenia jak w FR-008 (np. wpisanie e-maila lub słowa „USUŃ"), (2) pewności że cascade kasuje WSZYSTKIE tabele zależne — obecnie tylko `flashcards`; przy dodaniu nowych tabel pilnować `ON DELETE CASCADE`, (3) `SUPABASE_SERVICE_ROLE_KEY` to sekret o pełnych uprawnieniach — per Deployment rules: tylko env var, nigdy w trackowanym pliku, dodawany ręcznie do produkcji. Verify: po usunięciu konta ponowne logowanie = odmowa; dane nieosiągalne pod żadną ścieżką (NFR).
 - **Status:** ready
 
+---
+
+### S-05: Poprawki UX/UI
+
+- **Outcome:** zalogowany użytkownik widzi czytelniejszy, bardziej zachęcający dashboard — każda opcja (Generuj fiszki, Moja kolekcja, Sesja powtórek) ma krótki opis (kilka słów) wyjaśniający co robi, a układ prowadzi wzrok do głównej akcji zamiast płaskiej listy linków. Slice obejmuje też zamkniętą listę drobnych poprawek UX uzgodnioną w fazie planowania.
+- **Change ID:** ux-polish
+- **PRD refs:** — (brak bezpośredniego FR; usability/UX. Pośrednio wspiera adopcję — użytkownik szybciej trafia do pełnego flow north star)
+- **Prerequisites:** S-01, S-02, S-03 (dashboard opisuje opcje, które muszą już istnieć — wszystkie `done`)
+- **Parallel with:** S-04 (różne pliki: `dashboard.astro` + ekrany vs flow usuwania konta — bezpieczne równolegle, idealny kandydat na osobny worktree per M2L5)
+- **Blockers:** —
+- **Stan obecny:** `src/pages/dashboard.astro` — wyśrodkowana karta z 3 linkami-przyciskami (`/generate`, `/flashcards`, `/review`) + sign out; brak jakiegokolwiek opisu opcji.
+- **Unknowns:**
+  - **Zakres poza dashboardem** — które dodatkowe drobne poprawki UX wchodzą (np. spójność nagłówków między ekranami, empty-states, responsywność, focus/hover)? Owner: user. Block: no — zakres MUSI zostać zamknięty w `/10x-plan` (lista konkretnych poprawek), żeby uniknąć rozlewania zakresu.
+  - **Ikony per opcja** — czy dodać ikony (lucide-react już dostępne przez shadcn) czy zostać przy samym tekście? Owner: user. Block: no.
+- **Risk:** Slice „polish" jest najbardziej podatny na **scope creep** — bez zamkniętej listy poprawek rośnie w nieskończoność. Guardrail: rdzeniem i kryterium akceptacji jest dashboard z opisami opcji; reszta tylko z zamkniętej listy w planie. Niskie ryzyko techniczne — statyczny `.astro` + Tailwind (ewentualnie shadcn `card`), bez zmian w danych/API/migracjach. Verify: dashboard pokazuje opis przy każdej opcji; istniejące przepływy (generowanie/kolekcja/powtórki) działają jak wcześniej.
+- **Status:** ready
+
 ## Backlog Handoff
 
 | Roadmap ID | Change ID            | Suggested issue title                                       | Ready for `/10x-plan` | Notes                                                           |
@@ -158,6 +177,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-02       | flashcard-collection | Kolekcja fiszek: widok, tworzenie ręczne, edycja, usunięcie | no                    | Wymaga F-01                                                     |
 | S-03       | srs-review-session   | Sesja powtórek SRS                                          | yes                   | Odblokowany; wybór biblioteki SRS (Question #2) rozstrzygany w `/10x-plan` |
 | S-04       | account-deletion     | Usuwanie konta (RODO art. 17) z kaskadą danych             | yes                   | Mechanizm usunięcia z `auth.users` (Question #3) rozstrzygany w `/10x-plan`; PRD wymaga dopisania FR-011 |
+| S-05       | ux-polish            | Poprawki UX/UI: czytelniejszy dashboard z opisami opcji    | yes                   | Zamknąć listę poprawek w `/10x-plan` (guardrail na scope creep); rdzeń = dashboard z opisami |
 
 ## Open Roadmap Questions
 
