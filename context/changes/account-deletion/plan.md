@@ -286,8 +286,8 @@ No database migration. **Deployment:** add `SUPABASE_SERVICE_ROLE_KEY` to the pr
 
 #### Automated
 
-- [x] 3.1 Markdown formats cleanly (`npm run format` leaves no changes)
+- [x] 3.1 Markdown formats cleanly (`npm run format` leaves no changes) — 391c82f
 
 #### Manual
 
-- [x] 3.2 `prd.md` contains FR-011 describing account deletion, consistent with implemented behavior
+- [x] 3.2 `prd.md` contains FR-011 describing account deletion, consistent with implemented behavior — 391c82f
