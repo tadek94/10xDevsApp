@@ -1,10 +1,10 @@
 ---
 change_id: srs-review-session
 title: Sesja powtórek SRS — roadmap S-03 (north star, część końcowa)
-status: impl_reviewed
+status: archived
 created: 2026-06-05
 updated: 2026-06-06
-archived_at: null
+archived_at: 2026-06-06T11:13:37Z
 ---
 
 ## Notes
