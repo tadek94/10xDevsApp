@@ -32,23 +32,24 @@ import Topbar from "@/components/Topbar.astro";
       <h1
         class="mb-6 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-5xl leading-tight font-bold text-transparent sm:text-6xl lg:text-7xl"
       >
-        10x Astro Starter
+        Naucz się języka szybciej
       </h1>
       <p class="mb-10 max-w-2xl text-lg text-blue-100/70 sm:text-xl">
-        A production-ready starter with authentication, modern tooling, and a cosmic developer experience.
+        10xCards zamienia Twoje materiały w fiszki generowane przez AI i układa je w harmonogram inteligentnych powtórek
+        — tak, byś zapamiętał słówka na dłużej, ucząc się mniej.
       </p>
       <div class="flex flex-col gap-4 sm:flex-row">
         <a
-          href="/auth/signin"
+          href="/auth/signup"
           class="inline-flex items-center justify-center rounded-lg bg-purple-600 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-purple-500"
         >
-          Sign In
+          Zacznij naukę
         </a>
         <a
-          href="/auth/signup"
+          href="/auth/signin"
           class="inline-flex items-center justify-center rounded-lg border border-white/20 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-white/10"
         >
-          Sign Up
+          Zaloguj się
         </a>
       </div>
     </div>
@@ -68,12 +69,15 @@ import Topbar from "@/components/Topbar.astro";
           stroke-linejoin="round"
           class="mb-4 text-purple-300"
         >
-          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          <path
+            d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"
+          ></path>
+          <path d="M20 3v4"></path>
+          <path d="M22 5h-4"></path>
         </svg>
-        <h3 class="mb-2 text-lg font-semibold text-white">Authentication Ready</h3>
+        <h3 class="mb-2 text-lg font-semibold text-white">Fiszki tworzone przez AI</h3>
         <p class="text-sm leading-relaxed text-blue-100/60">
-          Built-in Supabase auth with sign in, sign up, and protected routes out of the box.
+          Wklej tekst lub notatki, a AI w kilka sekund wygeneruje gotowe fiszki do nauki.
         </p>
       </div>
 
@@ -90,13 +94,14 @@ import Topbar from "@/components/Topbar.astro";
           stroke-linejoin="round"
           class="mb-4 text-purple-300"
         >
-          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-          <polyline points="2 17 12 22 22 17"></polyline>
-          <polyline points="2 12 12 17 22 12"></polyline>
+          <path d="m17 2 4 4-4 4"></path>
+          <path d="M3 11v-1a4 4 0 0 1 4-4h14"></path>
+          <path d="m7 22-4-4 4-4"></path>
+          <path d="M21 13v1a4 4 0 0 1-4 4H3"></path>
         </svg>
-        <h3 class="mb-2 text-lg font-semibold text-white">Modern Stack</h3>
+        <h3 class="mb-2 text-lg font-semibold text-white">Inteligentne powtórki</h3>
         <p class="text-sm leading-relaxed text-blue-100/60">
-          Astro 5, React 19, Tailwind 4, and TypeScript — the latest tools, ready to go.
+          Algorytm spaced repetition pokazuje karty dokładnie wtedy, gdy zaczynasz je zapominać.
         </p>
       </div>
 
@@ -113,12 +118,11 @@ import Topbar from "@/components/Topbar.astro";
           stroke-linejoin="round"
           class="mb-4 text-purple-300"
         >
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path>
         </svg>
-        <h3 class="mb-2 text-lg font-semibold text-white">Developer Experience</h3>
+        <h3 class="mb-2 text-lg font-semibold text-white">Twoja kolekcja</h3>
         <p class="text-sm leading-relaxed text-blue-100/60">
-          ESLint, Prettier, and pre-commit hooks keep your codebase clean from day one.
+          Wszystkie fiszki w jednym miejscu, gotowe do nauki na każdym urządzeniu.
         </p>
       </div>
     </div>
