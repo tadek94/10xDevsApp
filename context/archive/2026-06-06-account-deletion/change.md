@@ -1,10 +1,10 @@
 ---
 change_id: account-deletion
 title: Account deletion
-status: implemented
+status: archived
 created: 2026-06-06
 updated: 2026-06-06
-archived_at: null
+archived_at: 2026-06-06T21:23:02Z
 ---
 
 ## Notes

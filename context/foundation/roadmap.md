@@ -34,7 +34,7 @@ top_blocker: capacity
 | S-01 | ai-generation-flow   | wkleić tekst, zobaczyć sugestie AI, zaakceptować/edytować/odrzucić, zapisać     | F-01, F-02    | US-01, FR-001, FR-002, FR-003, FR-004 | done     |
 | S-02 | flashcard-collection | zobaczyć kolekcję, dodać kartę ręcznie, edytować i usunąć z potwierdzeniem      | F-01          | FR-005, FR-006, FR-007, FR-008        | done     |
 | S-03 | srs-review-session   | uruchomić sesję powtórek z kartami wg algorytmu SRS                             | F-01, S-01    | FR-009, FR-010                        | done     |
-| S-04 | account-deletion     | trwale usunąć konto wraz ze wszystkimi danymi (RODO art. 17)                    | F-01          | FR-011 (proponowany), NFR             | ready    |
+| S-04 | account-deletion     | trwale usunąć konto wraz ze wszystkimi danymi (RODO art. 17)                    | F-01          | FR-011, NFR                           | done     |
 | S-05 | ux-polish            | czytelniejszy dashboard z krótkim opisem każdej opcji; drobne poprawki UX       | S-01,S-02,S-03| — (usability)                         | done     |
 
 ## Streams
@@ -148,7 +148,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - **Mechanizm usunięcia rekordu z `auth.users`** — klient SSR używa anon `SUPABASE_KEY` i NIE ma uprawnień do `auth.admin.deleteUser`. Dwie opcje: **(a)** osobny klient admin z nowym sekretem `SUPABASE_SERVICE_ROLE_KEY` (tylko server-side, nigdy do przeglądarki) wywołujący `supabase.auth.admin.deleteUser(userId)` — oficjalnie wspierana ścieżka; **(b)** Postgres RPC `SECURITY DEFINER` kasująca self z `auth.users`, wywoływana przez zalogowanego usera (bez nowego sekretu, ale custom SQL na schemacie auth). Owner: user. Block: tak — determinuje, czy do produkcji trafia nowy sekret. Rozstrzygane w `/10x-plan account-deletion`. Rekomendacja: opcja (a).
   - **Twarde czy miękkie usunięcie?** RODO art. 17 sugeruje trwałe usunięcie bez zbędnej zwłoki. Rekomendacja: hard delete + cascade (bez okresu karencji w MVP). Owner: user. Block: no.
 - **Risk:** Operacja nieodwracalna i regulowana prawnie. Wymaga: (1) wyraźnego potwierdzenia jak w FR-008 (np. wpisanie e-maila lub słowa „USUŃ"), (2) pewności że cascade kasuje WSZYSTKIE tabele zależne — obecnie tylko `flashcards`; przy dodaniu nowych tabel pilnować `ON DELETE CASCADE`, (3) `SUPABASE_SERVICE_ROLE_KEY` to sekret o pełnych uprawnieniach — per Deployment rules: tylko env var, nigdy w trackowanym pliku, dodawany ręcznie do produkcji. Verify: po usunięciu konta ponowne logowanie = odmowa; dane nieosiągalne pod żadną ścieżką (NFR).
-- **Status:** ready
+- **Status:** done
 
 ---
 
@@ -207,3 +207,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **S-02: zalogowany użytkownik może zobaczyć swoje fiszki jako płaską listę, stworzyć kartę ręcznie (front + back), edytować dowolną zapisaną kartę oraz usunąć kartę po potwierdzeniu.** — Archived 2026-06-03 → `context/archive/2026-06-02-flashcard-collection/`. Lesson: —.
 - **S-03: zalogowany użytkownik może uruchomić sesję spaced repetition na swoich zapisanych fiszkach; aplikacja pokazuje karty w kolejności wyznaczonej przez algorytm SRS i zapamiętuje wyniki do następnej sesji.** — Archived 2026-06-06 → `context/archive/2026-06-05-srs-review-session/`. Lesson: —.
 - **S-05: zalogowany użytkownik widzi czytelniejszy, bardziej zachęcający dashboard — każda opcja (Generuj fiszki, Moja kolekcja, Sesja powtórek) ma krótki opis (kilka słów) wyjaśniający co robi, a układ prowadzi wzrok do głównej akcji zamiast płaskiej listy linków.** — Archived 2026-06-06 → `context/archive/2026-06-06-ux-polish/`. Lesson: —.
+- **S-04: zalogowany użytkownik może trwale usunąć swoje konto wraz ze wszystkimi danymi (fiszki + historia powtórek) po wyraźnym potwierdzeniu; po usunięciu zostaje wylogowany i nie może się ponownie zalogować tym kontem.** — Archived 2026-06-06 → `context/archive/2026-06-06-account-deletion/`. Lesson: —.
