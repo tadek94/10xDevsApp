@@ -176,28 +176,28 @@ None — no data or schema changes.
 
 #### Automated
 
-- [x] 1.1 Lint passes: `npm run lint`
-- [x] 1.2 Production build succeeds: `npm run build`
+- [x] 1.1 Lint passes: `npm run lint` — c2bd20b
+- [x] 1.2 Production build succeeds: `npm run build` — c2bd20b
 
 #### Manual
 
-- [x] 1.3 `/dashboard` shows three option cards, each with an icon and a one-line description
-- [x] 1.4 "Generuj fiszki" is visibly the primary/dominant action
-- [x] 1.5 Layout is single-column on narrow viewport and multi-column on desktop
-- [x] 1.6 Sign out works; each card navigates to the correct route
-- [x] 1.7 No added client-side JS for the dashboard (icons are inline SVG)
+- [x] 1.3 `/dashboard` shows three option cards, each with an icon and a one-line description — c2bd20b
+- [x] 1.4 "Generuj fiszki" is visibly the primary/dominant action — c2bd20b
+- [x] 1.5 Layout is single-column on narrow viewport and multi-column on desktop — c2bd20b
+- [x] 1.6 Sign out works; each card navigates to the correct route — c2bd20b
+- [x] 1.7 No added client-side JS for the dashboard (icons are inline SVG) — c2bd20b
 
 ### Phase 2: Navigation consistency
 
 #### Automated
 
-- [ ] 2.1 Lint passes: `npm run lint`
-- [ ] 2.2 Production build succeeds: `npm run build`
+- [x] 2.1 Lint passes: `npm run lint`
+- [x] 2.2 Production build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 2.3 From `/generate`, can reach `/dashboard`, `/flashcards`, `/review`
-- [ ] 2.4 From `/flashcards`, can reach `/dashboard`, `/generate`, `/review`
-- [ ] 2.5 From `/review`, can reach `/dashboard`, `/generate`, `/flashcards`
-- [ ] 2.6 All three headers are structurally identical with correct feature colors
-- [ ] 2.7 Generate, collection, and review flows still function unchanged
+- [x] 2.3 From `/generate`, can reach `/dashboard`, `/flashcards`, `/review`
+- [x] 2.4 From `/flashcards`, can reach `/dashboard`, `/generate`, `/review`
+- [x] 2.5 From `/review`, can reach `/dashboard`, `/generate`, `/flashcards`
+- [x] 2.6 All three headers are structurally identical with correct feature colors
+- [x] 2.7 Generate, collection, and review flows still function unchanged
