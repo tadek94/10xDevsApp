@@ -313,8 +313,8 @@ Migracja tylko dodaje kolumny + indeks do istniejącej tabeli; istniejące wiers
 #### Manual
 - [x] 3.3 `GET /api/flashcards/due` zwraca tylko wymagalne, sort rosnąco po `srs_due` — db3cf1b
 - [x] 3.4 `POST .../review` przesuwa `srs_due` w przyszłość, zwraca pełną kartę, przeżywa reload — db3cf1b
-- [ ] 3.5 Zła ocena → 400; nieznane id → 404; brak sesji → 401
-- [ ] 3.6 NFR: karta innego konta → 404
+- [x] 3.5 Zła ocena → 400; nieznane id → 404; brak sesji → 401 — 456e7a1
+- [x] 3.6 NFR: karta innego konta → 404 — 456e7a1
 
 ### Phase 4: UI sesji powtórek
 
