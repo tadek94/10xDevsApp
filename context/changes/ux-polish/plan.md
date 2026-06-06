@@ -191,13 +191,13 @@ None — no data or schema changes.
 
 #### Automated
 
-- [x] 2.1 Lint passes: `npm run lint`
-- [x] 2.2 Production build succeeds: `npm run build`
+- [x] 2.1 Lint passes: `npm run lint` — 231e547
+- [x] 2.2 Production build succeeds: `npm run build` — 231e547
 
 #### Manual
 
-- [x] 2.3 From `/generate`, can reach `/dashboard`, `/flashcards`, `/review`
-- [x] 2.4 From `/flashcards`, can reach `/dashboard`, `/generate`, `/review`
-- [x] 2.5 From `/review`, can reach `/dashboard`, `/generate`, `/flashcards`
-- [x] 2.6 All three headers are structurally identical with correct feature colors
-- [x] 2.7 Generate, collection, and review flows still function unchanged
+- [x] 2.3 From `/generate`, can reach `/dashboard`, `/flashcards`, `/review` — 231e547
+- [x] 2.4 From `/flashcards`, can reach `/dashboard`, `/generate`, `/review` — 231e547
+- [x] 2.5 From `/review`, can reach `/dashboard`, `/generate`, `/flashcards` — 231e547
+- [x] 2.6 All three headers are structurally identical with correct feature colors — 231e547
+- [x] 2.7 Generate, collection, and review flows still function unchanged — 231e547
