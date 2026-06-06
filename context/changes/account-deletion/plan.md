@@ -270,24 +270,24 @@ No database migration. **Deployment:** add `SUPABASE_SERVICE_ROLE_KEY` to the pr
 
 #### Automated
 
-- [x] 2.1 Linting passes: `npm run lint`
-- [x] 2.2 Production build succeeds: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint` — 73eb0d5
+- [x] 2.2 Production build succeeds: `npm run build` — 73eb0d5
 
 #### Manual
 
-- [x] 2.3 `/account` redirects to sign-in when logged out
-- [x] 2.4 Delete button disabled until checkbox ticked
-- [x] 2.5 Successful flow lands on `/` with "account deleted" notice
-- [x] 2.6 Protected routes redirect to sign-in after deletion
-- [x] 2.7 Failed deletion shows inline error, user stays logged in on `/account`
-- [x] 2.8 Dashboard shows a working link to `/account`
+- [x] 2.3 `/account` redirects to sign-in when logged out — 73eb0d5
+- [x] 2.4 Delete button disabled until checkbox ticked — 73eb0d5
+- [x] 2.5 Successful flow lands on `/` with "account deleted" notice — 73eb0d5
+- [x] 2.6 Protected routes redirect to sign-in after deletion — 73eb0d5
+- [x] 2.7 Failed deletion shows inline error, user stays logged in on `/account` — 73eb0d5
+- [x] 2.8 Dashboard shows a working link to `/account` — 73eb0d5
 
 ### Phase 3: PRD update — FR-011
 
 #### Automated
 
-- [ ] 3.1 Markdown formats cleanly (`npm run format` leaves no changes)
+- [x] 3.1 Markdown formats cleanly (`npm run format` leaves no changes)
 
 #### Manual
 
-- [ ] 3.2 `prd.md` contains FR-011 describing account deletion, consistent with implemented behavior
+- [x] 3.2 `prd.md` contains FR-011 describing account deletion, consistent with implemented behavior

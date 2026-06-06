@@ -31,10 +31,12 @@ They open a study session with source material in hand — a medical guideline u
 ## Success Criteria
 
 ### Primary
+
 - 75% of AI-generated flashcards are accepted by the user (not deleted before the first review session).
 - 75% of all flashcards in an active account are created via AI generation, not manually.
 
 First-session flow that proves the product works:
+
 1. User signs up
 2. User pastes source text
 3. AI generates a set of flashcards
@@ -42,9 +44,11 @@ First-session flow that proves the product works:
 5. User starts a spaced repetition session with the accepted cards
 
 ### Secondary
+
 - User edits ≤ 25% of AI-generated cards before accepting them. Proxy for AI card quality — most cards are accepted as-is, with minor tweaks at most.
 
 ### Guardrails
+
 - Card edits must persist reliably. No silent data loss: if a user edits a card and saves, the change must survive a page reload.
 
 ## User Stories
@@ -56,6 +60,7 @@ First-session flow that proves the product works:
 - **Then** they see a list of suggested flashcard pairs (front + back) that they can accept, edit, or discard one by one, and then save the accepted cards to their collection
 
 #### Acceptance Criteria
+
 - At least one card is generated for any text input of ≥ 50 words
 - Each suggested card shows the front and back before the user commits
 - Discarded cards are not saved; accepted cards persist after page reload
@@ -64,38 +69,53 @@ First-session flow that proves the product works:
 ## Functional Requirements
 
 ### Authentication
+
 - FR-001: Guest can create an account (sign up with email + password). Priority: must-have
+
   > Socrates: Counter-argument considered: "Defer sign-up; use a single hardcoded account to validate AI generation first." Resolution: kept. A web app with persistent user flashcard data needs accounts from day one — deferring would block the primary success metric (per-user card acceptance rate).
 
 - FR-002: User can sign in and sign out. Priority: must-have
   > Socrates: No meaningful counter-argument. Sign-in/sign-out is a prerequisite of account-based persistence.
 
 ### Flashcard generation
+
 - FR-003: User can paste source text and trigger AI-generated flashcard suggestions. Priority: must-have
+
   > Socrates: Counter-argument considered: "AI card quality for dense professional content (legal, medical) may be lower than expected — shipping before validating quality risks the 75% acceptance metric." Resolution: kept, but flagged as the highest-risk assumption in the MVP. The 75% acceptance metric is precisely the validation signal; if quality is insufficient, it will show up early.
 
 - FR-004: User can accept, edit, or discard each AI-generated flashcard suggestion before saving. Priority: must-have
+
   > Socrates: Counter-argument considered: "Showing each card before saving is unnecessary if trust in AI is already high — defer to post-session review." Resolution: kept. Pre-save review is essential for the acceptance metric to be meaningful; users must consciously decide on each card for the 75% signal to carry information.
 
 - FR-005: User can create a flashcard manually (front + back). Priority: must-have
   > Socrates: Counter-argument considered: "Defer to v2 — manual creation adds work without testing the AI-first hypothesis." Resolution: kept, but for a specific reason: manual creation is a safety net for when AI generation produces poor results on a given input. Without it, a failed generation session leaves the user with nothing. It is a resilience feature, not a feature for its own sake.
 
 ### Flashcard management
+
 - FR-006: User can view their saved flashcard collection (flat list). Priority: must-have
+
   > Socrates: No meaningful counter-argument. Viewing the collection is table stakes.
 
 - FR-007: User can edit a saved flashcard. Priority: must-have
+
   > Socrates: Counter-argument considered: "Heavy editing signals an AI quality problem, not a UX need." Resolution: kept. Edit is necessary regardless — even good AI occasionally produces a card that needs a minor correction. Editing frequency is a metric to monitor, not a reason to omit the feature.
 
 - FR-008: User can delete a saved flashcard. Priority: must-have
   > Socrates: Counter-argument considered: "Deletion is irreversible in a flat list — accidental deletes lose study investment with no recovery path." Resolution: kept, with an implicit design constraint: the deletion flow must include a confirmation step to prevent accidental loss. Soft-delete can be considered for v2 if accidental deletion is reported.
 
 ### Spaced repetition
+
 - FR-009: User can start a spaced repetition review session using their saved flashcards. Priority: must-have
+
   > Socrates: Counter-argument considered: "A review session on 3–5 cards is meaningless for spaced repetition." Resolution: kept, but flags a design constraint: the app should communicate clearly when the deck is too small for meaningful scheduling, and may enforce a soft minimum before a full session can start.
 
 - FR-010: The app applies a ready-made spaced repetition algorithm to schedule future reviews. Priority: must-have
-  > Socrates: Counter-argument considered: "A third-party SRS library is a dependency you can't control — a simple interval schedule (1d → 3d → 7d) may be more predictable for MVP." Resolution: kept. Using a proven SRS library is the right call for correctness. However, the specific library choice is deferred to tech-stack selection — this FR only requires that *an established algorithm* is used, not which one.
+  > Socrates: Counter-argument considered: "A third-party SRS library is a dependency you can't control — a simple interval schedule (1d → 3d → 7d) may be more predictable for MVP." Resolution: kept. Using a proven SRS library is the right call for correctness. However, the specific library choice is deferred to tech-stack selection — this FR only requires that _an established algorithm_ is used, not which one.
+
+### Account lifecycle
+
+- FR-011: User can permanently delete their account and all associated data (flashcards + review history) after an explicit confirmation; they are signed out and cannot sign in again with that account. Realizes RODO Art. 17 ("right to be forgotten") and closes the lifecycle opened by FR-001. Priority: must-have
+  > Socrates: Counter-argument considered: "Hard delete is irreversible — a user who changes their mind has no recovery path." Resolution: kept as hard delete. RODO Art. 17 calls for erasure without undue delay, and the Non-Functional account-isolation guarantee requires that deleted data not exist under any request path; a grace-period soft delete would weaken both. Accidental loss is mitigated by an explicit confirmation step (consistent with FR-008).
 
 ## Non-Functional Requirements
 
