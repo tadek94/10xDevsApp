@@ -38,3 +38,10 @@
 - **Problem**: Plan kontraktował zwrot `{id}` / `.select("id")`, ale wyspa potrzebuje pełnej karty (`front, back, created_at`), by zsynchronizować stan bez dodatkowego round-tripu. Implementacja musiała odejść od litery planu (zwraca `{card}` / `{cards}`). Rozjazd plan↔UI wychodzi dopiero przy budowie frontu.
 - **Rule**: Gdy endpoint mutujący feeduje optymistyczny UI, projektuj kontrakt tak, by zwracał pełny zmieniony rekord (`.select` z kompletem pól), a plan ma to jawnie określać — nie domyślne `{id}`.
 - **Applies to**: plan, implement, impl-review
+
+## Po zmianie `env.schema` uruchom `astro sync` przed `lint`
+
+- **Context**: Dodanie/zmiana zmiennej w `env.schema` w `astro.config.mjs` (np. `SUPABASE_SERVICE_ROLE_KEY`), importowanej przez `astro:env/server`.
+- **Problem**: `npm run lint` (typed rules) zgłaszał `@typescript-eslint/no-unsafe-argument` na `supabase.ts` — nie z winy kodu, tylko dlatego, że wygenerowane typy `astro:env/server` w `.astro/` były nieświeże i nowy import rozwiązywał się do `any`. Fałszywy alarm znikał dopiero po regeneracji typów.
+- **Rule**: Po każdej zmianie `env.schema` (i ogólnie typów generowanych przez Astro) odpal `npx astro sync` (albo pełny `npm run build`) **przed** `npm run lint`. Inaczej lint może raportować fantomowe błędy typowania na nietkniętym kodzie.
+- **Applies to**: implement, impl-review
