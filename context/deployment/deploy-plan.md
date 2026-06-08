@@ -52,10 +52,16 @@ npx wrangler secret put OPENROUTER_API_KEY --name 10xdevsapp
 
 ## Co działa
 
+Pełne MVP (slice'y F-01…S-05, wszystkie `done` i wdrożone) — potwierdzone na prodzie 2026-06-08:
+
 - Strona produkcyjna (HTTP 200)
-- Rejestracja i logowanie (Supabase auth bez potwierdzenia emaila)
+- Rejestracja i logowanie (Supabase auth bez potwierdzenia emaila) — FR-001, FR-002
+- AI generation fiszek z wklejonego tekstu (`OPENROUTER_API_KEY` ustawiony, działa na obecnym planie) — S-01 / FR-003, FR-004
+- Kolekcja fiszek: przeglądanie, ręczne tworzenie, edycja, usuwanie z potwierdzeniem — S-02 / FR-005…FR-008
+- Sesja powtórek SRS (algorytm `ts-fsrs`, harmonogram zapamiętywany między sesjami) — S-03 / FR-009, FR-010
+- Usuwanie konta (RODO art. 17, hard delete + cascade, `SUPABASE_SERVICE_ROLE_KEY` ustawiony) — S-04 / FR-011
+- Dashboard z opisami opcji i spójną nawigacją (poprawiony UX) — S-05
 - Auto-deploy na push do `main` (GitHub Actions)
-- AI generation fiszek (potwierdzone 2026-06-08 — `OPENROUTER_API_KEY` ustawiony, działa na obecnym planie)
 
 ## Co nie działa
 
