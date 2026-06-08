@@ -1,6 +1,6 @@
 # Production State — 10xCards
 
-**Last updated:** 2026-05-26  
+**Last updated:** 2026-06-08  
 **Platform:** Cloudflare Workers + Assets  
 **Worker name:** `10xdevsapp`  
 **Production URL:** https://10xdevsapp.tadeusz-karczynski.workers.dev  
@@ -27,7 +27,8 @@ npm run build && npx wrangler deploy
 | `env.ASSETS` | Assets | (auto) |
 | `SUPABASE_URL` | Secret | ustawiony |
 | `SUPABASE_KEY` | Secret | ustawiony |
-| `OPENROUTER_API_KEY` | Secret | **nie ustawiony** — AI routes nie działają |
+| `OPENROUTER_API_KEY` | Secret | ustawiony — AI generation działa (potwierdzone 2026-06-08) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secret | ustawiony — wymagany przez usuwanie konta (S-04) |
 
 ---
 
@@ -54,13 +55,14 @@ npx wrangler secret put OPENROUTER_API_KEY --name 10xdevsapp
 - Strona produkcyjna (HTTP 200)
 - Rejestracja i logowanie (Supabase auth bez potwierdzenia emaila)
 - Auto-deploy na push do `main` (GitHub Actions)
+- AI generation fiszek (potwierdzone 2026-06-08 — `OPENROUTER_API_KEY` ustawiony, działa na obecnym planie)
 
 ## Co nie działa
 
-- AI routes — brak `OPENROUTER_API_KEY`
 - Sitemap — brak `site` w `astro.config.mjs` (nieistotne dla MVP)
 
-## Do zrobienia przed uruchomieniem AI
+## Backlog operacyjny (nie blokuje MVP)
 
-1. Dodać `OPENROUTER_API_KEY` (patrz wyżej)
-2. Upgrade do Workers Paid plan ($5/mies.) — free tier ma limit 10ms CPU, za mało dla wywołań OpenRouter
+- Supabase redirect URLs — dodać prod URL (Authentication → URL Configuration) dla poprawnego flow potwierdzania e-maila
+- Skasować osierocony projekt Cloudflare Pages `10xdevsapp` (pozostałość po nieudanej próbie Pages)
+- Workers Paid plan ($5/mies.) — rozważyć, jeśli pojawią się timeouty CPU na AI routes pod obciążeniem (na razie generation działa na obecnym planie)

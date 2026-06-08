@@ -26,10 +26,16 @@ export const POST: APIRoute = async (context) => {
   }
 
   // Deletion succeeded — clear the session cookies via the cookie-bound client so the
-  // response carries the session-clearing Set-Cookie headers.
+  // response carries the session-clearing Set-Cookie headers. Best-effort: the account is
+  // already gone, so a signOut failure must not surface as a misleading "delete failed".
   const supabase = createClient(context.request.headers, context.cookies);
   if (supabase) {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+    } catch (signOutError) {
+      // eslint-disable-next-line no-console
+      console.error(signOutError);
+    }
   }
 
   return Response.json({ ok: true });

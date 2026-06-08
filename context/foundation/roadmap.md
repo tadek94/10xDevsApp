@@ -187,7 +187,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 3. **Mechanizm usunięcia konta (S-04)** — Jak skasować rekord z `auth.users`, skoro klient SSR używa anon `SUPABASE_KEY`? Opcje: (a) klient admin z `SUPABASE_SERVICE_ROLE_KEY` + `auth.admin.deleteUser()` (nowy sekret w produkcji, ścieżka oficjalna); (b) Postgres RPC `SECURITY DEFINER` (bez nowego sekretu, custom SQL na schemacie auth). Determinuje, czy do produkcji trafia nowy sekret o pełnych uprawnieniach. Owner: user. Block: tak dla S-04 — rozstrzygane w `/10x-plan account-deletion`. Rekomendacja: opcja (a).
 
-4. **Aktualizacja PRD o usuwanie konta** — PRD v1 nie zawiera wymagania usuwania konta (tylko FR-001 tworzenie). S-04 wprowadza proponowany FR-011 (RODO art. 17). PRD należy zaktualizować, by wymaganie miało źródło. Owner: user. Block: nie blokuje implementacji S-04, ale powinno zostać domknięte dla spójności dokumentacji.
+4. **Aktualizacja PRD o usuwanie konta** — ✅ ROZSTRZYGNIĘTE 2026-06-08: PRD zawiera już FR-011 (usuwanie konta, RODO art. 17) jako must-have — zob. `context/foundation/prd.md`. Wymaganie ma źródło; niespójność dokumentacji zamknięta. Sekret `SUPABASE_SERVICE_ROLE_KEY` (opcja (a) z Question #3) potwierdzony w produkcji 2026-06-08.
 
 ## Parked
 
