@@ -16,7 +16,9 @@
       "Edit",
       "Write",
       "Skill(10x-rule-review)",
-      "Bash(gh issue *)"
+      "Bash(gh issue *)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(echo \"cached-empty-exit=$?\")"
     ],
     "deny": [
       "Bash(rm -rf *)"

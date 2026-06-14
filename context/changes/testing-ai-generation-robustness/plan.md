@@ -411,25 +411,25 @@ None. No production code or data changes.
 
 #### Automated
 
-- [x] 1.1 Dependencies install cleanly: `npm install`
-- [x] 1.2 Test runner executes and passes: `npm test`
-- [x] 1.3 Lint still passes: `npm run lint`
-- [x] 1.4 Build still passes: `npm run build`
+- [x] 1.1 Dependencies install cleanly: `npm install` — 8e9afb4
+- [x] 1.2 Test runner executes and passes: `npm test` — 8e9afb4
+- [x] 1.3 Lint still passes: `npm run lint` — 8e9afb4
+- [x] 1.4 Build still passes: `npm run build` — 8e9afb4
 
 #### Manual
 
-- [x] 1.5 `npm run test:watch` starts watch mode and re-runs on change
+- [x] 1.5 `npm run test:watch` starts watch mode and re-runs on change — 8e9afb4
 
 ### Phase 2: Endpoint Robustness Tests
 
 #### Automated
 
-- [ ] 2.1 Endpoint tests pass: `npm test`
-- [ ] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Endpoint tests pass: `npm test`
+- [x] 2.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Inverting the 502/422 split locally makes the split test fail
+- [x] 2.3 Inverting the 502/422 split locally makes the split test fail
 
 ### Phase 3: Island Behavioral Tests
 
