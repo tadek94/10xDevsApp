@@ -446,9 +446,9 @@ None. No production code or data changes.
 
 #### Automated
 
-- [x] 4.1 Full suite still green: `npm test`
-- [x] 4.2 Lint + build still pass: `npm run lint` && `npm run build`
+- [x] 4.1 Full suite still green: `npm test` — 9963c3b
+- [x] 4.2 Lint + build still pass: `npm run lint` && `npm run build` — 9963c3b
 
 #### Manual
 
-- [x] 4.3 §6 is self-sufficient for writing a new endpoint/component test
+- [x] 4.3 §6 is self-sufficient for writing a new endpoint/component test — 9963c3b
