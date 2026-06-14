@@ -424,23 +424,23 @@ None. No production code or data changes.
 
 #### Automated
 
-- [x] 2.1 Endpoint tests pass: `npm test`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Endpoint tests pass: `npm test` — 46e428f
+- [x] 2.2 Lint passes: `npm run lint` — 46e428f
 
 #### Manual
 
-- [x] 2.3 Inverting the 502/422 split locally makes the split test fail
+- [x] 2.3 Inverting the 502/422 split locally makes the split test fail — 46e428f
 
 ### Phase 3: Island Behavioral Tests
 
 #### Automated
 
-- [ ] 3.1 Island tests pass: `npm test`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Island tests pass: `npm test`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 Removing the island `finally` locally makes the re-enable assertion fail
+- [x] 3.3 Removing the island `finally` locally makes the re-enable assertion fail
 
 ### Phase 4: Cookbook + Plan Sync
 
