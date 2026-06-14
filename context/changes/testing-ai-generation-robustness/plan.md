@@ -435,20 +435,20 @@ None. No production code or data changes.
 
 #### Automated
 
-- [x] 3.1 Island tests pass: `npm test`
-- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Island tests pass: `npm test` — f7fe9d7
+- [x] 3.2 Lint passes: `npm run lint` — f7fe9d7
 
 #### Manual
 
-- [x] 3.3 Removing the island `finally` locally makes the re-enable assertion fail
+- [x] 3.3 Removing the island `finally` locally makes the re-enable assertion fail — f7fe9d7
 
 ### Phase 4: Cookbook + Plan Sync
 
 #### Automated
 
-- [ ] 4.1 Full suite still green: `npm test`
-- [ ] 4.2 Lint + build still pass: `npm run lint` && `npm run build`
+- [x] 4.1 Full suite still green: `npm test`
+- [x] 4.2 Lint + build still pass: `npm run lint` && `npm run build`
 
 #### Manual
 
-- [ ] 4.3 §6 is self-sufficient for writing a new endpoint/component test
+- [x] 4.3 §6 is self-sufficient for writing a new endpoint/component test

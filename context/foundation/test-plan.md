@@ -100,7 +100,7 @@ orchestrator updates Status as artifacts appear on disk.
 
 | # | Phase name | Goal (one line) | Risks covered | Test types | Status | Change folder |
 |---|------------|-----------------|----------------|------------|--------|---------------|
-| 1 | Bootstrap + AI-generation robustness | Stand up the runner; prove the generate flow stays sane on bad/empty/error/slow LLM responses | #1 | unit + integration (mocked OpenRouter; no DB) | planned | context/changes/testing-ai-generation-robustness/ |
+| 1 | Bootstrap + AI-generation robustness | Stand up the runner; prove the generate flow stays sane on bad/empty/error/slow LLM responses | #1 | unit + integration (mocked OpenRouter; no DB) | complete | context/changes/testing-ai-generation-robustness/ |
 | 2 | Persistence & data integrity | Prove card create/edit survives reload and SRS grades persist and schedule | #2, #6 | integration (DB read-back on cloud test project) | not started | — |
 | 3 | Authorization & isolation | Prove no cross-account read/write and that gated routes reject unauthenticated requests | #3, #4 | integration (two users + middleware, on cloud test project) | not started | — |
 | 4 | Account-deletion completeness | Prove RODO delete removes all of this user's data and blocks re-login | #5 | integration (service-role + DB read-back on cloud test project) | not started | — |
@@ -115,13 +115,16 @@ The classic test base for this project. AI-native tools (if any) carry a
 
 | Layer | Tool | Version | Notes |
 |-------|------|---------|-------|
-| unit + integration | none yet — see Phase 1 | — | No runner configured today; Phase 1 bootstraps it. Vitest is the natural fit for an Astro + Vite project — confirm via `/10x-research` in Phase 1. |
-| API / HTTP mocking | none yet — see Phase 1 | — | OpenRouter calls must be mocked at the network edge (e.g. MSW). Decision belongs to Phase 1 research. |
+| unit + integration | Vitest + jsdom + React Testing Library | vitest ^4.1.8, jsdom ^29.1.1, @testing-library/react ^16.3.2, @testing-library/jest-dom ^6.9.1, @testing-library/user-event ^14.6.1, @vitejs/plugin-react ^5.2.0 (checked: 2026-06-14) | Plain `vitest/config` — **not** `getViteConfig` (the @astrojs/cloudflare adapter's Vite plugin aborts Vitest startup). `@/*` alias + React transform supplied directly; jsdom env; `tests/setup.ts` loads jest-dom matchers. Tests live in top-level `tests/` mirroring `src/`. |
+| API / HTTP mocking | module mock at the AI seam (`vi.mock("@/lib/ai")`) + `vi.stubGlobal("fetch", …)` for the island | n/a (checked: 2026-06-14) | **MSW deferred** by cost × signal: Risk #1's oracle is how *our code* handles the response, controlled by mocking `ai.chat.completions.create` (resolve/reject) — far cheaper than an MSW server + `astro:env` resolution. Revisit MSW only for SDK-envelope / browser-level fidelity (e2e). |
 | e2e | feasible on the cloud test project — deferred by cost × signal | — | Not blocked by infrastructure: Playwright bundles its own browsers and the app runs via `wrangler dev` / a preview against the cloud test project (no Docker needed). Deferred because integration on the test DB gives the same signal for the current risks more cheaply. Revisit for the north-star UI flow (full UI → middleware → cookie → handler → DB crossing). |
 | (optional) AI-native | LLM-as-judge — checked: 2026-06-10 | n/a | When NOT to use: never gate CI on it and never assert exact text; it is a periodic, sampled probe on whether generated cards are structurally valid and on-topic for the source, not a per-PR deterministic test. |
 
-**Test base today: `none`** — no runner config, zero test files, no `test`
-script. Phase 1 is a true bootstrap.
+**Test base today (as of 2026-06-14): Vitest.** Runner configured
+(`vitest.config.ts`), `npm test` (headless) and `npm run test:watch` scripts,
+16 tests across `tests/` covering Risk #1 (generate endpoint + React island).
+Phase 1 bootstrap is complete; Phases 2–4 add DB read-back on the cloud test
+project.
 
 **Test environment (settled): a dedicated cloud Supabase test project.**
 Supabase is cloud-only and there is no local Docker, so there is **no local
@@ -168,11 +171,13 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 ### 6.1 Adding a unit test
 
-- TBD — see §3 Phase 1 (runner bootstrap; SRS-wrapper scheduling pattern lands in Phase 2).
+- Runner: **Vitest** — `npm test` (headless) and `npm run test:watch` (local dev). Config is `vitest.config.ts` at the project root: a plain `defineConfig` from `vitest/config` (jsdom env, `globals: true`, `setupFiles: ["./tests/setup.ts"]`, `include: ["tests/**/*.{test,spec}.{ts,tsx}"]`).
+- Put tests in the top-level **`tests/`** directory, mirroring `src/` (e.g. `src/lib/foo.ts` → `tests/lib/foo.test.ts`). The `@/*` alias resolves in tests.
+- For component tests use **React Testing Library** (`@testing-library/react` + `@testing-library/user-event`); jest-dom matchers (`toBeInTheDocument`, `toBeEnabled`, …) are pre-registered via `tests/setup.ts`. `render(<Comp/>)`, query by role/label/text (never by class — see §7), drive interactions with `userEvent`, wrap post-async assertions in `waitFor`. (SRS-wrapper scheduling pattern lands in Phase 2.)
 
 ### 6.2 Adding an integration test
 
-- TBD — see §3 Phase 1 for the mocked-OpenRouter generate-endpoint pattern; extended by Phase 2 (DB read-back) and Phase 3 (two-user authorization). All DB read-back runs against the dedicated cloud Supabase test project (see §4), never prod.
+- Phase 1 pattern (no DB): exercise an Astro API route by importing its exported handler and calling it directly with a hand-built `APIContext` — see **§6.4** for the mocked-AI generate-endpoint pattern. Extended by Phase 2 (DB read-back) and Phase 3 (two-user authorization). All DB read-back runs against the dedicated cloud Supabase test project (see §4), never prod.
 
 ### 6.3 Adding an e2e test
 
@@ -185,7 +190,10 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 ### 6.4 Adding a test for a new API endpoint
 
-- TBD — see §3 Phase 1. Will capture: how to exercise an Astro API route, where to mock the external HTTP edge (OpenRouter), and how to assert both response shape and DB side-effects under RLS. DB side-effects are asserted against the cloud test project (see §4), never prod.
+- **Invoke the handler directly** — no Astro Container API needed. Import the exported `POST`/`GET` and call it with a minimal fake context: `{ locals: { user: { id } }, request: new Request(url, { method, headers, body }) } as unknown as APIContext`. The handler reads only `context.locals.user` and `context.request`.
+- **Mock the external HTTP edge at the module seam, hoisted above the handler import.** AI seam: `vi.mock("@/lib/ai", () => ({ ai: { chat: { completions: { create: vi.fn() } } }, DEFAULT_MODEL: "test-model" }))`. This binds the handler's top-level `import { ai } from "@/lib/ai"` to the mock, so the real module (and its `astro:env/server` import) never loads — no `astro:env` resolution needed. Per test: `createMock.mockResolvedValue({ choices: [{ message: { content } }] })` for a chosen body, or `.mockRejectedValue(err)` to simulate a thrown call.
+- **Assert status + parsed body shape, never volatile content** (no exact card text, no model id — see §7). `Response.json()` resolves to `any`; narrow it with one typed `as` helper.
+- Worked example: `tests/pages/api/flashcards/generate.test.ts` — the 502-on-throw vs 422-on-malformed split is the highest-value assertion. DB side-effects (Phase 2+) are asserted against the cloud test project (see §4), never prod.
 
 ### 6.5 Adding a test for cross-account isolation
 
@@ -195,6 +203,8 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 (Optional. After each phase lands, `/10x-implement` appends a 2-3 line note
 here capturing anything surprising the phase taught.)
+
+- **Phase 1 (2026-06-14, Bootstrap + Risk #1):** `getViteConfig` from `astro/config` is unusable for Vitest here — it loads the `@astrojs/cloudflare` adapter whose Vite plugin aborts startup ("environment options incompatible … resolve.external"). Use a plain `vitest/config` with `@vitejs/plugin-react` + a manual `@/*` alias instead; Astro virtual modules aren't needed because the AI seam is mocked. Pin `@vitejs/plugin-react` to `^5` (v6 needs a `vite/internal` export the project's Vite 7.3.3 doesn't expose). The anti-frozen-UI guarantee is a *client* property (`finally { setIsGenerating(false) }`) invisible to endpoint tests — hence the two-layer split (endpoint + island).
 
 ## 7. What We Deliberately Don't Test
 
@@ -209,7 +219,7 @@ contributors should respect these unless the underlying assumption changes.
 ## 8. Freshness Ledger
 
 - Strategy (§1–§5) last reviewed: 2026-06-14
-- Stack versions last verified: 2026-06-10
+- Stack versions last verified: 2026-06-14 (Phase 1 test stack pinned)
 - AI-native tool references last verified: 2026-06-10
 - Test environment decided (dedicated cloud Supabase test project): 2026-06-14
 
