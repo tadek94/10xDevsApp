@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/eslint-changed.mjs"
+          },
+          {
+            "type": "command",
+            "command": "npx tsc --noEmit",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
