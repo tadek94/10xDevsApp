@@ -1,3 +1,5 @@
+// OpenRouter-backed OpenAI client. This is the AI seam for Risk #1 (test-plan.md §2):
+// edits here trigger the related-tests hook (generate endpoint + island).
 import OpenAI from "openai";
 import { OPENROUTER_API_KEY } from "astro:env/server";
 
