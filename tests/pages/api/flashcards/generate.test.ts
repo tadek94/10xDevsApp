@@ -9,6 +9,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("@/lib/ai", () => ({
   ai: { chat: { completions: { create: vi.fn() } } },
   DEFAULT_MODEL: "test-model",
+  MODEL_CHAIN: ["test-model", "test-model-fallback"],
 }));
 
 import { ai } from "@/lib/ai";
@@ -90,6 +91,22 @@ describe("POST /api/flashcards/generate — bad-response handling (Risk #1)", ()
     expect(res.status).not.toBe(422);
     const data = await readBody(res);
     expect(data.error).toBe("AI service unavailable");
+  });
+
+  // Model fallback: when the first model in MODEL_CHAIN fails (e.g. 429 rate
+  // limit or a transient outage), the next model is tried. A first-model failure
+  // followed by a second-model success must still yield 200.
+  it("falls back to the next model in the chain when the first one fails", async () => {
+    createMock
+      .mockRejectedValueOnce(new Error("first model rate-limited"))
+      .mockResolvedValueOnce({ choices: [{ message: { content: JSON.stringify([card(1), card(2)]) } }] });
+
+    const res = await POST(makeContext());
+
+    expect(res.status).toBe(200);
+    const data = await readBody(res);
+    expect(data.cards).toHaveLength(2);
+    expect(createMock).toHaveBeenCalledTimes(2);
   });
 
   it("returns 200 with validated cards, capped at 15", async () => {
