@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
-import { ai, DEFAULT_MODEL } from "@/lib/ai";
+import { ai, MODEL_CHAIN } from "@/lib/ai";
 
 export const prerender = false;
 
@@ -21,6 +21,30 @@ Rules:
 - Back: clear, accurate answer (1–3 sentences)
 - Return ONLY a valid JSON array, no preamble, no markdown fences:
 [{"front": "...", "back": "..."}, ...]`;
+
+// Try each model in MODEL_CHAIN in order; return the first that responds. A free
+// model can be rate-limited (429) or temporarily down, so the next model in the
+// chain is the fallback. If every model fails, the last error propagates.
+async function generateRaw(text: string): Promise<string> {
+  let lastErr: unknown;
+  for (const model of MODEL_CHAIN) {
+    try {
+      const completion = await ai.chat.completions.create({
+        model,
+        messages: [
+          { role: "system", content: GENERATION_PROMPT },
+          { role: "user", content: `Source text:\n${text}` },
+        ],
+        max_tokens: 2000,
+      });
+      return completion.choices[0]?.message?.content ?? "";
+    } catch (err) {
+      lastErr = err;
+      console.warn(`Model ${model} failed, trying next in chain:`, err);
+    }
+  }
+  throw lastErr;
+}
 
 export const POST: APIRoute = async (context) => {
   if (!context.locals.user) {
@@ -47,16 +71,9 @@ export const POST: APIRoute = async (context) => {
 
   let raw: string;
   try {
-    const completion = await ai.chat.completions.create({
-      model: DEFAULT_MODEL,
-      messages: [
-        { role: "system", content: GENERATION_PROMPT },
-        { role: "user", content: `Source text:\n${text}` },
-      ],
-      max_tokens: 2000,
-    });
-    raw = completion.choices[0]?.message?.content ?? "";
-  } catch {
+    raw = await generateRaw(text);
+  } catch (err) {
+    console.error("AI generation failed on all models:", err);
     return Response.json({ error: "AI service unavailable" }, { status: 502 });
   }
 

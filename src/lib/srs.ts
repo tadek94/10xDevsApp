@@ -1,4 +1,4 @@
-import { createEmptyCard, fsrs, Rating, type Card } from "ts-fsrs";
+import { createEmptyCard, fsrs, Rating, type Card, type Grade } from "ts-fsrs";
 import { formatDate } from "@/lib/utils";
 import type { ReviewRating, SrsState } from "@/types";
 
@@ -9,7 +9,7 @@ import type { ReviewRating, SrsState } from "@/types";
 export const scheduler = fsrs();
 
 /** Maps the lowercased API rating to the ts-fsrs Rating enum. */
-const RATING_MAP: Record<ReviewRating, Rating> = {
+const RATING_MAP: Record<ReviewRating, Grade> = {
   again: Rating.Again,
   hard: Rating.Hard,
   good: Rating.Good,
