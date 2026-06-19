@@ -70,6 +70,9 @@ const astroConfig = tseslint.config({
 
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
+  // Tooling scripts (agent hooks) live here; they're not part of the app's
+  // tsconfig, so the type-aware parser can't resolve them. Don't lint them.
+  { ignores: [".claude/**"] },
   baseConfig,
   reactConfig,
   eslintPluginAstro.configs["flat/recommended"],
