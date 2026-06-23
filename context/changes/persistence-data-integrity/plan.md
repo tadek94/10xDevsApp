@@ -507,21 +507,21 @@ prod migrations.
 
 #### Automated
 
-- [x] 3.1 Grade + due tests pass: `npm run test:integration`
-- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Grade + due tests pass: `npm run test:integration` — e4d63f9
+- [x] 3.2 Lint passes: `npm run lint` — e4d63f9
 
 #### Manual
 
-- [x] 3.3 The "again"<"good" ordering is stable across a few re-runs (fuzz doesn't flip it)
+- [x] 3.3 The "again"<"good" ordering is stable across a few re-runs (fuzz doesn't flip it) — e4d63f9
 
 ### Phase 4: Cookbook + Plan Sync
 
 #### Automated
 
-- [ ] 4.1 Unit suite green and offline: `npm test`
-- [ ] 4.2 Integration suite green: `npm run test:integration`
-- [ ] 4.3 Lint + build pass: `npm run lint` && `npm run build`
+- [x] 4.1 Unit suite green and offline: `npm test`
+- [x] 4.2 Integration suite green: `npm run test:integration`
+- [x] 4.3 Lint + build pass: `npm run lint` && `npm run build`
 
 #### Manual
 
-- [ ] 4.4 §6.2/§6.4 are self-sufficient for writing a new DB-touching integration test
+- [x] 4.4 §6.2/§6.4 are self-sufficient for writing a new DB-touching integration test

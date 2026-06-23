@@ -101,7 +101,7 @@ orchestrator updates Status as artifacts appear on disk.
 | # | Phase name | Goal (one line) | Risks covered | Test types | Status | Change folder |
 |---|------------|-----------------|----------------|------------|--------|---------------|
 | 1 | Bootstrap + AI-generation robustness | Stand up the runner; prove the generate flow stays sane on bad/empty/error/slow LLM responses | #1 | unit + integration (mocked OpenRouter; no DB) | complete | context/changes/testing-ai-generation-robustness/ |
-| 2 | Persistence & data integrity | Prove card create/edit survives reload and SRS grades persist and schedule | #2, #6 | integration (DB read-back on cloud test project) | not started | — |
+| 2 | Persistence & data integrity | Prove card create/edit survives reload and SRS grades persist and schedule | #2, #6 | integration (DB read-back on cloud test project) | complete | context/changes/persistence-data-integrity/ |
 | 3 | Authorization & isolation | Prove no cross-account read/write and that gated routes reject unauthenticated requests | #3, #4 | integration (two users + middleware, on cloud test project) | not started | — |
 | 4 | Account-deletion completeness | Prove RODO delete removes all of this user's data and blocks re-login | #5 | integration (service-role + DB read-back on cloud test project) | not started | — |
 | 5 | Quality gates + AI-native generation probe **(optional)** | Wire lint/typecheck/unit+integration into CI; add one sampled LLM-as-judge probe on generation relevance/structure | cross-cutting | gates + AI-native | not started | — |
@@ -120,11 +120,13 @@ The classic test base for this project. AI-native tools (if any) carry a
 | e2e | feasible on the cloud test project — deferred by cost × signal | — | Not blocked by infrastructure: Playwright bundles its own browsers and the app runs via `wrangler dev` / a preview against the cloud test project (no Docker needed). Deferred because integration on the test DB gives the same signal for the current risks more cheaply. Revisit for the north-star UI flow (full UI → middleware → cookie → handler → DB crossing). |
 | (optional) AI-native | LLM-as-judge — checked: 2026-06-10 | n/a | When NOT to use: never gate CI on it and never assert exact text; it is a periodic, sampled probe on whether generated cards are structurally valid and on-topic for the source, not a per-PR deterministic test. |
 
-**Test base today (as of 2026-06-14): Vitest.** Runner configured
-(`vitest.config.ts`), `npm test` (headless) and `npm run test:watch` scripts,
-16 tests across `tests/` covering Risk #1 (generate endpoint + React island).
-Phase 1 bootstrap is complete; Phases 2–4 add DB read-back on the cloud test
-project.
+**Test base today (as of 2026-06-23): Vitest, two projects.** `unit` (jsdom,
+offline — `npm test`) and `integration` (node, cloud test project — `npm run
+test:integration`). 17 unit tests (Risk #1: generate endpoint + React island)
++ 10 integration tests (Risks #2/#6: create/edit persistence, SRS
+grade/scheduling, due-list) against the cloud test project. Rollout Phases 1–2
+are complete; Phases 3 (cross-account isolation) and 4 (account-deletion)
+remain, Phase 5 optional.
 
 **Test environment (settled): a dedicated cloud Supabase test project.**
 Supabase is cloud-only and there is no local Docker, so there is **no local
@@ -171,13 +173,14 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 ### 6.1 Adding a unit test
 
-- Runner: **Vitest** — `npm test` (headless) and `npm run test:watch` (local dev). Config is `vitest.config.ts` at the project root: a plain `defineConfig` from `vitest/config` (jsdom env, `globals: true`, `setupFiles: ["./tests/setup.ts"]`, `include: ["tests/**/*.{test,spec}.{ts,tsx}"]`).
+- Runner: **Vitest** with two projects in `vitest.config.ts` (plain `defineConfig` from `vitest/config`): **`unit`** (jsdom, offline — the default `npm test` / `npm run test:watch`; `globals: true`, `setupFiles: ["./tests/setup.ts"]`, includes `tests/**` except `tests/integration/**`) and **`integration`** (node, hits the cloud test project — `npm run test:integration`; see §6.2). The `@/*` alias resolves in both.
 - Put tests in the top-level **`tests/`** directory, mirroring `src/` (e.g. `src/lib/foo.ts` → `tests/lib/foo.test.ts`). The `@/*` alias resolves in tests.
 - For component tests use **React Testing Library** (`@testing-library/react` + `@testing-library/user-event`); jest-dom matchers (`toBeInTheDocument`, `toBeEnabled`, …) are pre-registered via `tests/setup.ts`. `render(<Comp/>)`, query by role/label/text (never by class — see §7), drive interactions with `userEvent`, wrap post-async assertions in `waitFor`. (SRS-wrapper scheduling pattern lands in Phase 2.)
 
 ### 6.2 Adding an integration test
 
-- Phase 1 pattern (no DB): exercise an Astro API route by importing its exported handler and calling it directly with a hand-built `APIContext` — see **§6.4** for the mocked-AI generate-endpoint pattern. Extended by Phase 2 (DB read-back) and Phase 3 (two-user authorization). All DB read-back runs against the dedicated cloud Supabase test project (see §4), never prod.
+- **No-DB pattern (Phase 1):** exercise an Astro API route by importing its exported handler and calling it directly with a hand-built `APIContext` — see **§6.4** for the mocked-AI generate-endpoint pattern.
+- **DB read-back pattern (Phase 2):** for handlers that touch Supabase, run the **real** code against the cloud test project (see §4) — never mock the DB seam. Tests live under `tests/integration/**` (the `integration` Vitest project, node env). That project aliases `astro:env/server` → `tests/shims/astro-env-server.ts` (re-exports `process.env`) so the real `src/lib/supabase.ts` runs unchanged; `tests/integration/setup.ts` loads `.env.test` (dep-free) and fails fast if keys are missing. Helpers in `tests/integration/helpers/`: `auth.ts` (create a pre-confirmed unique user via the service-role admin API, sign in **once** and cache the captured `sb-<ref>-auth-token` cookie, build an authenticated `APIContext`, delete the user on teardown — FK cascade removes the rows), `clients.ts` (service-role `adminClient` + `anonClient`, minimal typed `Database`), `db.ts` (service-role read-back: `readFlashcard`, `readFlashcardsByUser`, `setSrsDue`), `http.ts` (typed `readJson`). Flow: **create user → drive the handler via `authedContext` → assert via an independent service-role read-back** (a privileged reader RLS can't fool). Worked examples: `tests/integration/flashcards/{create,edit,review,due}.integration.test.ts`. Two-user authorization is Phase 3 (§6.5).
 
 ### 6.3 Adding an e2e test
 
@@ -192,8 +195,9 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 - **Invoke the handler directly** — no Astro Container API needed. Import the exported `POST`/`GET` and call it with a minimal fake context: `{ locals: { user: { id } }, request: new Request(url, { method, headers, body }) } as unknown as APIContext`. The handler reads only `context.locals.user` and `context.request`.
 - **Mock the external HTTP edge at the module seam, hoisted above the handler import.** AI seam: `vi.mock("@/lib/ai", () => ({ ai: { chat: { completions: { create: vi.fn() } } }, DEFAULT_MODEL: "test-model" }))`. This binds the handler's top-level `import { ai } from "@/lib/ai"` to the mock, so the real module (and its `astro:env/server` import) never loads — no `astro:env` resolution needed. Per test: `createMock.mockResolvedValue({ choices: [{ message: { content } }] })` for a chosen body, or `.mockRejectedValue(err)` to simulate a thrown call.
-- **Assert status + parsed body shape, never volatile content** (no exact card text, no model id — see §7). `Response.json()` resolves to `any`; narrow it with one typed `as` helper.
-- Worked example: `tests/pages/api/flashcards/generate.test.ts` — the 502-on-throw vs 422-on-malformed split is the highest-value assertion. DB side-effects (Phase 2+) are asserted against the cloud test project (see §4), never prod.
+- **Assert status + parsed body shape, never volatile content** (no exact card text, no model id — see §7). `Response.json()` resolves to `any`; narrow it with one typed `as` helper (`tests/integration/helpers/http.ts`).
+- **DB-touching endpoints (Phase 2):** do **not** mock the DB seam — run the real `src/lib/supabase.ts` via the `astro:env/server` alias shim and supply a **real authenticated session**. `context.locals.user` only passes the 401 gate; the RLS identity (`auth.uid()`) comes from the JWT in the request `Cookie`, hydrated by `getSession()` — so a context with only `locals.user` fails every RLS write. Use `authedContext(user, { url, method, body, params })` (§6.2), which attaches the captured cookie, then assert side-effects via a service-role read-back. See `tests/integration/flashcards/edit.integration.test.ts`.
+- Worked example (no-DB): `tests/pages/api/flashcards/generate.test.ts` — the 502-on-throw vs 422-on-malformed split is the highest-value assertion. DB side-effects (Phase 2+) are asserted against the cloud test project (see §4), never prod.
 
 ### 6.5 Adding a test for cross-account isolation
 
@@ -205,6 +209,7 @@ the relevant rollout phase ships; before that, the sub-section reads
 here capturing anything surprising the phase taught.)
 
 - **Phase 1 (2026-06-14, Bootstrap + Risk #1):** `getViteConfig` from `astro/config` is unusable for Vitest here — it loads the `@astrojs/cloudflare` adapter whose Vite plugin aborts startup ("environment options incompatible … resolve.external"). Use a plain `vitest/config` with `@vitejs/plugin-react` + a manual `@/*` alias instead; Astro virtual modules aren't needed because the AI seam is mocked. Pin `@vitejs/plugin-react` to `^5` (v6 needs a `vite/internal` export the project's Vite 7.3.3 doesn't expose). The anti-frozen-UI guarantee is a *client* property (`finally { setIsGenerating(false) }`) invisible to endpoint tests — hence the two-layer split (endpoint + island).
+- **Phase 2 (2026-06-23, Persistence & data integrity — Risks #2/#6):** DB tests can't reuse Phase 1's `vi.mock` escape (the DB *is* what's under test), so the `integration` Vitest project aliases `astro:env/server` to a `process.env` shim and runs the real `supabase.ts`. `locals.user` alone is rejected by RLS — the JWT must ride in the `Cookie`, so the fixture signs in and replays the `@supabase/ssr` cookie rather than hand-rolling its `base64-`/chunked format; sign in **once per user** and cache the cookie or GoTrue rate-limits the run. Run integration files **sequentially** with a generous timeout (`testTimeout: 30000`, `fileParallelism: false`): parallel auth bursts against the shared project rate-limit, and multi-round-trip tests blow past the 5s default. Any "is it due now?" assertion must pin `srs_due` to the past (`setSrsDue` helper) — a freshly inserted `srs_due` uses the DB clock and client/DB skew can leave it momentarily not-yet-due. Assert observable persistence + relative ordering (`again`<`good`), never ts-fsrs internals. Config gotcha: `SUPABASE_URL` must be the **base** project URL, not the `…/rest/v1/` REST URL (the latter makes auth/admin calls 404 as `PGRST125`).
 
 ## 7. What We Deliberately Don't Test
 
