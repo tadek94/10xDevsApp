@@ -518,10 +518,10 @@ prod migrations.
 
 #### Automated
 
-- [x] 4.1 Unit suite green and offline: `npm test`
-- [x] 4.2 Integration suite green: `npm run test:integration`
-- [x] 4.3 Lint + build pass: `npm run lint` && `npm run build`
+- [x] 4.1 Unit suite green and offline: `npm test` — b76b7a0
+- [x] 4.2 Integration suite green: `npm run test:integration` — b76b7a0
+- [x] 4.3 Lint + build pass: `npm run lint` && `npm run build` — b76b7a0
 
 #### Manual
 
-- [x] 4.4 §6.2/§6.4 are self-sufficient for writing a new DB-touching integration test
+- [x] 4.4 §6.2/§6.4 are self-sufficient for writing a new DB-touching integration test — b76b7a0
