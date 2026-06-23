@@ -482,26 +482,26 @@ prod migrations.
 
 #### Automated
 
-- [x] 1.1 Unit project still passes and stays offline: `npm test`
-- [x] 1.2 Integration smoke passes against the test project: `npm run test:integration`
-- [x] 1.3 Lint passes: `npm run lint`
-- [x] 1.4 Build passes: `npm run build`
+- [x] 1.1 Unit project still passes and stays offline: `npm test` — a631f6b
+- [x] 1.2 Integration smoke passes against the test project: `npm run test:integration` — a631f6b
+- [x] 1.3 Lint passes: `npm run lint` — a631f6b
+- [x] 1.4 Build passes: `npm run build` — a631f6b
 
 #### Manual
 
-- [x] 1.5 After a smoke run, the test user no longer exists in the test project (teardown works)
-- [x] 1.6 `npm test` with no `.env.test` present still passes (unit needs no keys)
+- [x] 1.5 After a smoke run, the test user no longer exists in the test project (teardown works) — a631f6b
+- [x] 1.6 `npm test` with no `.env.test` present still passes (unit needs no keys) — a631f6b
 
 ### Phase 2: Risk #2 — Create/Edit Persistence
 
 #### Automated
 
-- [ ] 2.1 Create + edit persistence tests pass: `npm run test:integration`
-- [ ] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Create + edit persistence tests pass: `npm run test:integration`
+- [x] 2.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Breaking PATCH persistence locally makes the read-back assertion fail (revert)
+- [x] 2.3 Breaking PATCH persistence locally makes the read-back assertion fail (revert)
 
 ### Phase 3: Risk #6 — SRS Grade & Scheduling
 
