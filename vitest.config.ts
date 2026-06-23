@@ -37,6 +37,12 @@ export default defineConfig({
           globals: true,
           setupFiles: ["./tests/integration/setup.ts"],
           include: ["tests/integration/**/*.{test,spec}.ts"],
+          // Real cloud round-trips (createUser → sign-in → handler → read-back) need more
+          // than the 5s default; run files sequentially so the shared test project isn't hit
+          // by parallel auth bursts (GoTrue rate limits).
+          testTimeout: 30000,
+          hookTimeout: 30000,
+          fileParallelism: false,
         },
       },
     ],

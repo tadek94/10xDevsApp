@@ -496,23 +496,23 @@ prod migrations.
 
 #### Automated
 
-- [x] 2.1 Create + edit persistence tests pass: `npm run test:integration`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Create + edit persistence tests pass: `npm run test:integration` — 7fcb0b5
+- [x] 2.2 Lint passes: `npm run lint` — 7fcb0b5
 
 #### Manual
 
-- [x] 2.3 Breaking PATCH persistence locally makes the read-back assertion fail (revert)
+- [x] 2.3 Breaking PATCH persistence locally makes the read-back assertion fail (revert) — 7fcb0b5
 
 ### Phase 3: Risk #6 — SRS Grade & Scheduling
 
 #### Automated
 
-- [ ] 3.1 Grade + due tests pass: `npm run test:integration`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Grade + due tests pass: `npm run test:integration`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
-- [ ] 3.3 The "again"<"good" ordering is stable across a few re-runs (fuzz doesn't flip it)
+- [x] 3.3 The "again"<"good" ordering is stable across a few re-runs (fuzz doesn't flip it)
 
 ### Phase 4: Cookbook + Plan Sync
 

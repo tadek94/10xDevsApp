@@ -19,3 +19,16 @@ export async function readFlashcardsByUser(userId: string): Promise<Flashcard[]>
   }
   return data;
 }
+
+/** Force a card's due date (service-role) — used to seed distinct due times for ordering tests. */
+export async function setSrsDue(id: string, isoDue: string): Promise<void> {
+  // Our minimal Database generic types reads well but narrows update() values to `never`
+  // (no full generated types); cast the partial payload to satisfy it.
+  const { error } = await adminClient()
+    .from("flashcards")
+    .update({ srs_due: isoDue } as never)
+    .eq("id", id);
+  if (error) {
+    throw new Error(`setSrsDue failed: ${error.message}`);
+  }
+}

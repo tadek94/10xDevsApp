@@ -14,6 +14,9 @@ export interface TestUser {
   id: string;
   email: string;
   password: string;
+  /** Captured auth cookie, populated lazily on first authedContext() — reused across the
+   *  user's requests so we sign in once per user (not once per request → avoids GoTrue rate limits). */
+  cookieHeader?: string;
 }
 
 /** Create an isolated, pre-confirmed user (unique email → parallel-safe). */
@@ -73,8 +76,8 @@ export interface RequestSpec {
  * stub satisfies the client's setAll. Pass to a handler as `POST(context)`.
  */
 export async function authedContext(user: TestUser, spec: RequestSpec): Promise<APIContext> {
-  const cookieHeader = await captureCookieHeader(user.email, user.password);
-  const headers: Record<string, string> = { Cookie: cookieHeader };
+  user.cookieHeader ??= await captureCookieHeader(user.email, user.password);
+  const headers: Record<string, string> = { Cookie: user.cookieHeader };
   let body: string | undefined;
   if (spec.body !== undefined) {
     headers["content-type"] = "application/json";
