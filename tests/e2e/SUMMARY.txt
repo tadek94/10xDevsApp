@@ -1,0 +1,51 @@
+PODSUMOWANIE — Lekcja 4 (E2E, /10x-e2e)
+=========================================
+
+CEL
+Browser-level test ryzyka #2 (UI layer): zaloguj sie -> dodaj karte recznie
+-> karta przezywa pelny reload strony (auth -> routing -> API -> DB -> SSR).
+
+CO POWSTALO (commit scaffold E2E)
+- playwright.config.ts        webServer = produkcyjny build + preview, port 4329
+- tests/e2e/seed.spec.ts      seed/exemplar + test ryzyka (obecnie test.fixme)
+- tests/e2e/RULES.md          lever regul E2E (getByRole, izolacja, wait-for-state)
+- tests/e2e/helpers/supabase.ts  service-role: tworzenie/kasowanie usera testowego
+- scripts/e2e.sh              podmienia .dev.vars na projekt TEST na czas biegu,
+                              z gwarantowanym przywroceniem (trap EXIT)
+- npm run test:e2e            wrapper uruchamiajacy powyzsze
+- @playwright/test + chromium
+
+PRZEJECHANY PELNY LOOP /10x-e2e
+setup -> generate -> review (5 anti-patternow) -> verify.
+Review zlapal i naprawil: niejednoznaczny getByLabel("Password") (-> exact:true)
+oraz wyscig hydracji wyspy client:load (-> retry toPass na otwarciu formularza).
+
+APLIKACJA JEST POPRAWNA (zweryfikowane diagnostyka)
+- POST /api/flashcards -> 200, saved:1
+- karta w bazie PRZED i PO reloadzie (DB count = 1)
+- SSR HTML /flashcards PO reloadzie ZAWIERA karte (reload SSR HTML contains card: true)
+Czyli persystencja i render SSR dzialaja end-to-end. Ryzyko #2 jest dodatkowo
+chronione testami integracyjnymi (tests/integration/), ktore przechodza.
+
+DLACZEGO TEST JEST test.fixme (zablokowany, NIE udawany zielony)
+Adapter @astrojs/cloudflare ma 3 osobne pulapki srodowiskowe dla E2E:
+  1) astro dev czyta sekrety z .dev.vars, ignoruje .env/.env.test/--mode
+     -> naiwny bieg trafia na PROD (rozwiazane: swap .dev.vars w scripts/e2e.sh)
+  2) Vite HMR/restart w astro dev ABORTUJE lecace fetch-POST-y (net::ERR_ABORTED)
+     i reloady -> flakiness tylko w dev (form-POST loginu nie byl dotkniety)
+  3) astro preview (zbudowany worker przez wrangler) NIE podchwytuje podmienionego
+     .dev.vars tak jak dev -> server startuje na zlym projekcie, login nie przechodzi
+
+FOLLOW-UP (zeby dokonczyc zielony E2E)
+- doprowadzic preview/wrangler do czytania sekretow projektu TEST
+  (konfiguracja test-env dla wranglera albo zweryfikowana sciezka .dev.vars),
+- flip test.fixme -> test w tests/e2e/seed.spec.ts,
+- deliberate-break check (np. flashcards.astro renderuje pusta liste -> test na czerwono).
+
+STATUS TESTOW
+- npm test               (unit, offline)         : 17 passed
+- npm run test:integration (cloud test project)  : 10 passed
+- npm run test:e2e       (Cloudflare preview)     : 1 pending (test.fixme)
+
+Szczegoly i regula zapisane w context/foundation/lessons.md
+("E2E on the Cloudflare adapter: test-env isolation + dev-server fetch aborts").

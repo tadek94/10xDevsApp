@@ -20,7 +20,15 @@ pnpm-debug.log*
 
 # cloudflare
 .dev.vars
+.dev.vars.e2e-backup
 .wrangler/
+
+# playwright
+test-results/
+playwright-report/
+blob-report/
+/playwright/.cache/
+.playwright-cli/
 
 # cache
 .cache/
