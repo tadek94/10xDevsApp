@@ -1,7 +1,7 @@
 ---
 change_id: persistence-data-integrity
 title: Persistence & data integrity tests (test-plan Phase 2, risks #2 + #6)
-status: implemented
+status: impl_reviewed
 created: 2026-06-23
 updated: 2026-06-24
 archived_at: null

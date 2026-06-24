@@ -74,6 +74,7 @@ describe("GET /api/flashcards/due — scheduling is observable (Risk #6)", () =>
     await setSrsDue(laterId, new Date(Date.now() - 1 * 3600_000).toISOString());
 
     const ordered = (await dueIds(user)).filter((id) => id === earlierId || id === laterId);
+    expect(ordered).toHaveLength(2);
     expect(ordered).toEqual([earlierId, laterId]);
   });
 });
