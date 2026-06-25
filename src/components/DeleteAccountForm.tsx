@@ -24,7 +24,9 @@ export function DeleteAccountForm() {
       const data = (await res.json().catch(() => ({}))) as DeleteResponse;
       setError(data.error ?? "Nie udało się usunąć konta. Spróbuj ponownie.");
       setSubmitting(false);
-    } catch {
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Account deletion request failed:", err);
       setError("Wystąpił błąd sieci. Spróbuj ponownie.");
       setSubmitting(false);
     }

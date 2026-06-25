@@ -58,7 +58,9 @@ export function FlashcardItem({ card, onSaved, onDeleted, onUnauthorized }: Flas
       }
       onSaved(data.card);
       setEditing(false);
-    } catch {
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Flashcard update request failed:", err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setBusy(false);
@@ -80,7 +82,9 @@ export function FlashcardItem({ card, onSaved, onDeleted, onUnauthorized }: Flas
         return;
       }
       onDeleted(card.id);
-    } catch {
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Flashcard delete request failed:", err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setBusy(false);

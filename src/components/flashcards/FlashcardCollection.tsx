@@ -50,7 +50,9 @@ export function FlashcardCollection({ initialCards }: FlashcardCollectionProps) 
       setNewFront("");
       setNewBack("");
       setAdding(false);
-    } catch {
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Flashcard create request failed:", err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setIsSaving(false);

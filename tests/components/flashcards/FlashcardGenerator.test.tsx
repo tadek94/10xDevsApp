@@ -66,6 +66,24 @@ describe("FlashcardGenerator — anti-frozen-UI on failed generation (Risk #1)",
     expect(screen.getByRole("button", { name: /Generuj/i })).toBeEnabled();
   });
 
+  // Debugging-as-test (m3l5): a swallowed catch destroys the only evidence a
+  // debugger would have. The user may still see a friendly message, but the real
+  // error must reach a log channel (OWASP A10:2025 logging/monitoring failures).
+  it("logs the underlying error instead of swallowing it when fetch rejects", async () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const underlying = new Error("boom: unexpected failure");
+    fetchMock.mockRejectedValue(underlying);
+    const { user, button } = renderAndPrime();
+
+    await user.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByText("Nie można połączyć się z serwerem.")).toBeInTheDocument();
+    });
+    expect(consoleError).toHaveBeenCalledWith(expect.any(String), underlying);
+    consoleError.mockRestore();
+  });
+
   it("renders suggestions and no error banner on a successful generation", async () => {
     fetchMock.mockResolvedValue(
       jsonResponse(200, {

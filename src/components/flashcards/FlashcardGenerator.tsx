@@ -69,7 +69,11 @@ export function FlashcardGenerator() {
           editBack: c.back,
         })),
       );
-    } catch {
+    } catch (err) {
+      // Don't swallow the error — log the evidence (OWASP A10:2025) before
+      // showing the user a friendly message.
+      // eslint-disable-next-line no-console
+      console.error("Flashcard generation request failed:", err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setIsGenerating(false);
@@ -98,7 +102,9 @@ export function FlashcardGenerator() {
       setSuccess(`Zapisano ${data.saved} kart do kolekcji.`);
       setSuggestions([]);
       setText("");
-    } catch {
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Flashcard save request failed:", err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setIsSaving(false);

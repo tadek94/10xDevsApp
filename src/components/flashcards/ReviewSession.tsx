@@ -111,7 +111,9 @@ export function ReviewSession({ initialCards }: ReviewSessionProps) {
       // Persisted server-side; advance to the next card.
       setIndex((i) => i + 1);
       setRevealed(false);
-    } catch {
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Review submission request failed:", err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setIsSubmitting(false);
