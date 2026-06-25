@@ -27,25 +27,37 @@ APLIKACJA JEST POPRAWNA (zweryfikowane diagnostyka)
 Czyli persystencja i render SSR dzialaja end-to-end. Ryzyko #2 jest dodatkowo
 chronione testami integracyjnymi (tests/integration/), ktore przechodza.
 
-DLACZEGO TEST JEST test.fixme (zablokowany, NIE udawany zielony)
+PULAPKI SRODOWISKOWE (historycznie blokowaly zielony bieg)
 Adapter @astrojs/cloudflare ma 3 osobne pulapki srodowiskowe dla E2E:
   1) astro dev czyta sekrety z .dev.vars, ignoruje .env/.env.test/--mode
      -> naiwny bieg trafia na PROD (rozwiazane: swap .dev.vars w scripts/e2e.sh)
   2) Vite HMR/restart w astro dev ABORTUJE lecace fetch-POST-y (net::ERR_ABORTED)
      i reloady -> flakiness tylko w dev (form-POST loginu nie byl dotkniety)
-  3) astro preview (zbudowany worker przez wrangler) NIE podchwytuje podmienionego
-     .dev.vars tak jak dev -> server startuje na zlym projekcie, login nie przechodzi
+  3) astro preview czyta .dev.vars z dist/server/.dev.vars (path.resolve(configDir,
+     ".dev.vars")), a astro build KOPIUJE root .dev.vars do dist/server -> poniewaz
+     scripts/e2e.sh podmienia root PRZED buildem, sekrety TEST same trafiaja do
+     preview. Brak osobnej konfiguracji test-env dla wranglera; trap #3 nie istnieje.
 
-FOLLOW-UP (zeby dokonczyc zielony E2E)
-- doprowadzic preview/wrangler do czytania sekretow projektu TEST
-  (konfiguracja test-env dla wranglera albo zweryfikowana sciezka .dev.vars),
-- flip test.fixme -> test w tests/e2e/seed.spec.ts,
-- deliberate-break check (np. flashcards.astro renderuje pusta liste -> test na czerwono).
+FOLLOW-UP -> ZROBIONE (2026-06-25, zielony E2E)
+- preview czyta sekrety projektu TEST: ZWERYFIKOWANE
+  (log wranglera "Using secrets defined in dist\server\.dev.vars" + odczyt ref).
+- prawdziwy blocker to byl WYSCIG HYDRACJI na formularzu logowania (client:load):
+  kontrolowane inputy resetowaly sie do "" gdy fill trafil przed hydracja
+  -> pusty POST -> redirect na /auth/signin?error -> waitForURL("/") nigdy nie
+  strzelal. Fix: re-fill email/hasla w expect(...).toPass() z asercja toHaveValue
+  przed submitem (ten sam wzorzec wait-for-state co przy dodawaniu karty).
+- flip test.fixme -> test w tests/e2e/seed.spec.ts: ZROBIONE.
+- deliberate-break check: ZROBIONE — wymuszenie initialCards=[] w flashcards.astro
+  daje czerwona asercje DOKLADNIE po reloadzie (linia 72), a optymistyczna asercja
+  przed reloadem zostaje zielona -> test realnie lapie ryzyko #2.
+- naprawiono tez: vitest "unit" zasysal specy Playwrighta -> dodano tests/e2e/**
+  do exclude w vitest.config.ts.
 
 STATUS TESTOW
-- npm test               (unit, offline)         : 17 passed
+- npm test               (unit, offline)         : 17 passed (3 pliki)
 - npm run test:integration (cloud test project)  : 10 passed
-- npm run test:e2e       (Cloudflare preview)     : 1 pending (test.fixme)
+- npm run test:e2e       (Cloudflare preview)     : 1 passed
 
 Szczegoly i regula zapisane w context/foundation/lessons.md
-("E2E on the Cloudflare adapter: test-env isolation + dev-server fetch aborts").
+("E2E on the Cloudflare adapter: test-env isolation + dev-server fetch aborts",
+ sekcja "Update (resolved 2026-06-25)").

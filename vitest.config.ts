@@ -26,7 +26,9 @@ export default defineConfig({
           globals: true,
           setupFiles: ["./tests/setup.ts"],
           include: ["tests/**/*.{test,spec}.{ts,tsx}"],
-          exclude: [...configDefaults.exclude, "tests/integration/**"],
+          // Playwright specs (tests/e2e/**) use @playwright/test's runner, not Vitest —
+          // importing them here throws "test.describe() was not expected to be called".
+          exclude: [...configDefaults.exclude, "tests/integration/**", "tests/e2e/**"],
         },
       },
       {

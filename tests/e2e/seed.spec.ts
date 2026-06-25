@@ -26,22 +26,26 @@ test.describe("flashcard persistence across reload (Risk #2, UI layer)", () => {
     }
   });
 
-  // BLOCKED (not a failure): the app is verified correct end-to-end (card persists
-  // to the DB and the SSR /flashcards HTML contains it). The green run is gated on
-  // test-env wiring for the Cloudflare runtime — `astro preview` (built worker)
-  // doesn't pick up the swapped .dev.vars, so sign-in can't reach the test project.
-  // See context/foundation/lessons.md ("E2E against the Cloudflare adapter").
-  // Flip `test.fixme` → `test` once the preview reads the test project's secrets.
-  test.fixme("a manually added card survives a full page reload", async ({ page }) => {
+  test("a manually added card survives a full page reload", async ({ page }) => {
     const account = user;
     if (!account) throw new Error("test user was not created");
     const front = `E2E front ${Date.now()}`;
     const back = "E2E back";
 
     // Sign in through the real form (auth → cookie). Success redirects to "/".
+    // The form is a client:load island with controlled inputs, so a fill can land
+    // before hydration and then get reset to "" — re-fill until the value sticks
+    // (wait for state, not time) before submitting, or an empty POST would bounce
+    // back to /auth/signin?error and the redirect to "/" would never happen.
     await page.goto("/auth/signin");
-    await page.getByLabel("Email", { exact: true }).fill(account.email);
-    await page.getByLabel("Password", { exact: true }).fill(account.password);
+    const emailField = page.getByLabel("Email", { exact: true });
+    const passwordField = page.getByLabel("Password", { exact: true });
+    await expect(async () => {
+      await emailField.fill(account.email);
+      await passwordField.fill(account.password);
+      await expect(emailField).toHaveValue(account.email);
+      await expect(passwordField).toHaveValue(account.password);
+    }).toPass({ timeout: 15000 });
     await page.getByRole("button", { name: "Sign in" }).click();
     await page.waitForURL("/");
 
