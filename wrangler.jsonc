@@ -1,7 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "10xdevsapp",
-  "main": "@astrojs/cloudflare/entrypoints/server",
+  // Custom worker entry: wraps the adapter handler with Sentry (sentry.server.config.ts
+  // re-exports @astrojs/cloudflare/entrypoints/server via Sentry.withSentry).
+  "main": "./sentry.server.config.ts",
   "compatibility_date": "2026-05-08",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {

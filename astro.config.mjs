@@ -5,11 +5,19 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import cloudflare from "@astrojs/cloudflare";
+import sentry from "@sentry/astro";
 
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap(),
+    // Sentry handles the client bundle + build wiring; the server side is wrapped
+    // via the custom worker entry (sentry.server.config.ts in wrangler.jsonc).
+    // Sourcemap upload is off until a Sentry project + auth token exist.
+    sentry({ sourceMapsUploadOptions: { enabled: false } }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
