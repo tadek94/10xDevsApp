@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as Sentry from "@sentry/astro";
 import { Loader2, Plus, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -53,6 +54,7 @@ export function FlashcardCollection({ initialCards }: FlashcardCollectionProps) 
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Flashcard create request failed:", err);
+      Sentry.captureException(err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setIsSaving(false);

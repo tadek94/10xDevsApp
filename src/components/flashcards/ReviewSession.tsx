@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as Sentry from "@sentry/astro";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ReviewCard, ReviewRating } from "@/types";
@@ -114,6 +115,7 @@ export function ReviewSession({ initialCards }: ReviewSessionProps) {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Review submission request failed:", err);
+      Sentry.captureException(err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setIsSubmitting(false);

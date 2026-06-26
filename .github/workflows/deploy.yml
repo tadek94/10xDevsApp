@@ -18,6 +18,10 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          # Client-side (public) Sentry DSN, inlined into the browser bundle at build.
+          # Unset -> empty string -> sentry.client.config.ts no-ops. Set as an Actions
+          # *variable* (public), not a secret.
+          PUBLIC_SENTRY_DSN: ${{ vars.PUBLIC_SENTRY_DSN }}
       - run: npx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

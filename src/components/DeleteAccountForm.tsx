@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as Sentry from "@sentry/astro";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -27,6 +28,7 @@ export function DeleteAccountForm() {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Account deletion request failed:", err);
+      Sentry.captureException(err);
       setError("Wystąpił błąd sieci. Spróbuj ponownie.");
       setSubmitting(false);
     }

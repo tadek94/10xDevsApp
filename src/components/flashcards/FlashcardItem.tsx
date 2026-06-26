@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as Sentry from "@sentry/astro";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -61,6 +62,7 @@ export function FlashcardItem({ card, onSaved, onDeleted, onUnauthorized }: Flas
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Flashcard update request failed:", err);
+      Sentry.captureException(err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setBusy(false);
@@ -85,6 +87,7 @@ export function FlashcardItem({ card, onSaved, onDeleted, onUnauthorized }: Flas
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Flashcard delete request failed:", err);
+      Sentry.captureException(err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setBusy(false);

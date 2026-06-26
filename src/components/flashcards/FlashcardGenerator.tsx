@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as Sentry from "@sentry/astro";
 import { Loader2, Save, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -74,6 +75,7 @@ export function FlashcardGenerator() {
       // showing the user a friendly message.
       // eslint-disable-next-line no-console
       console.error("Flashcard generation request failed:", err);
+      Sentry.captureException(err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setIsGenerating(false);
@@ -105,6 +107,7 @@ export function FlashcardGenerator() {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Flashcard save request failed:", err);
+      Sentry.captureException(err);
       setError("Nie można połączyć się z serwerem.");
     } finally {
       setIsSaving(false);
