@@ -13,7 +13,10 @@
     "test": "vitest run --project unit",
     "test:watch": "vitest --project unit",
     "test:integration": "vitest run --project integration",
-    "test:e2e": "bash scripts/e2e.sh"
+    "test:e2e": "bash scripts/e2e.sh",
+    "depcruise": "depcruise src",
+    "depcruise:graph": "depcruise src --output-type mermaid --output-to dependency-graph.mmd",
+    "depcruise:json": "depcruise src --output-type json --output-to dependency-graph.json"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
@@ -51,6 +54,7 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@vitejs/plugin-react": "^5.2.0",
+    "dependency-cruiser": "^18.0.0",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.7.0",

@@ -43,3 +43,6 @@ blob-report/
 # skille
 .agents/
 .claude/skills/
+# dependency-cruiser generated output
+dependency-graph.mmd
+dependency-graph.json
