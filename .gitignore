@@ -47,3 +47,6 @@ blob-report/
 # dependency-cruiser generated output
 dependency-graph.mmd
 dependency-graph.json
+
+# legacy code analysis — local checkout of withastro/astro, never push
+astro-legacy-analysis/

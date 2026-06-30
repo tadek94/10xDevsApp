@@ -1,0 +1,3 @@
+# Research — cel pogłębienia
+
+**Cel (1 linia):** Badam przeciek warstw `cli/infra/*` — czy `build-time-astro-version-provider.ts` (i sąsiedzi pod `cli/infra/`) są realnie konsumowani POZA CLI przez `core/dev` / `core/preview` / `vite-plugin-app` (czyli „CLI" to w istocie współdzielona infra); zaczynam od `cli/infra/build-time-astro-version-provider.ts` i `cli/index.ts`; mapa wskazała ten obszar, bo §4 oznacza `cli/infra/*` jako przeciek warstw o bus factor ≈ 1, §6 podaje oba pliki jako entry pointy/„przykład przecieku", a §7 (brak `tsConfig` w grafie, niewidoczny dynamic import) czyni liczbę „14 importów" pierwszym unknownem do potwierdzenia lub obalenia w kodzie.
