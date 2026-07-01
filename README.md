@@ -1,8 +1,10 @@
-# 10x Astro Starter
+# 10xCards
 
 ![](./public/template.png)
 
-A modern, opinionated starter template for building fast, accessible web applications.
+**10xCards** turns source material into study-ready flashcards. Paste a block of text and an LLM generates question/answer cards that you can review, edit, and keep — every card is tied to your account and persisted in Supabase. Reviews are scheduled with a spaced-repetition algorithm (FSRS via `ts-fsrs`), so cards resurface right before you'd forget them. Authentication, per-user data isolation (Postgres RLS), and GDPR-compliant account deletion are built in.
+
+> Product foundation (problem, scope, requirements) lives in `context/foundation/` — start with `prd.md`.
 
 ## Tech Stack
 
